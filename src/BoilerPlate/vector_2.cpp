@@ -1,0 +1,182 @@
+
+#include <cmath>
+#include "vector_2.hpp"
+
+/*Default constructor*/
+Vector2::Vector2()
+{
+	x = 0.0f;
+	y = 0.0f;
+	length = 0.0f;
+}
+
+/*Parameterized constructor. Sets the x and y values to the specified ones*/
+Vector2::Vector2(float xValue, float yValue)
+{
+	x = xValue;
+	y = yValue;
+	length = Length();
+}
+
+/*Parameterized constructor. Sets the x and y values to the same specified value*/
+Vector2::Vector2(float value)
+{
+	x = value;
+	y = value;
+	length = Length();
+}
+
+/*Returns vector's length*/
+float Vector2::Length() const
+{
+	return sqrt(x * x + y * y);
+}
+
+/*Returns length raised to the power of 2*/
+float Vector2::SquaredLength() const
+{
+	return (x * x + y * y);
+}
+
+/*Divides x and y values by vector's length*/
+float Vector2::Normalize()
+{
+	float inverseScale = 1.0f / length;
+	x *= inverseScale;
+	y *= inverseScale;
+
+	//Calculate new length
+	length = Length();
+
+	return length;
+}
+
+Vector2& Vector2::operator=(const Vector2& aVector2)
+{
+	//Prevent self assignment
+	if (this == &aVector2)
+		return *this;
+
+	x = aVector2.x;
+	y = aVector2.y;
+
+	//Calculate new length
+	length = Length();
+
+	return *this;
+}
+
+Vector2& Vector2::operator+=(const Vector2& aVector2)
+{
+	x = x + aVector2.x;
+	y = y + aVector2.y;
+
+	//Calculate new length
+	length = Length();
+
+	return *this;
+}
+
+Vector2& Vector2::operator-=(const Vector2& aVector2)
+{
+	x = x - aVector2.x;
+	y = y - aVector2.y;
+
+	//Calculate new length
+	length = Length();
+
+	return *this;
+}
+
+Vector2& Vector2::operator*=(const Vector2& aVector2)
+{
+	x = x * aVector2.x;
+	y = y * aVector2.y;
+
+	//Calculate new length
+	length = Length();
+
+	return *this;
+}
+
+Vector2& Vector2::operator/=(const Vector2& aVector2)
+{
+	if (aVector2.x == 0) throw "Can't divide by zero";
+	if (aVector2.y == 0) throw "Can't divide by zero";
+
+	x = x / aVector2.x;
+	y = y / aVector2.y;
+
+	//Calculate new length
+	length = Length();
+
+	return *this;
+}
+
+/*Calculates resulting coordinates of the addition and returns them as a new vector*/
+Vector2 Vector2::operator+(const Vector2& aVector2) const
+{
+	float xValue = x + aVector2.x;
+	float yValue = y + aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
+/*Calculates resulting coordinates of the subtraction and returns them as a new vector*/
+Vector2 Vector2::operator-(const Vector2& aVector2) const
+{
+	float xValue = x - aVector2.x;
+	float yValue = y - aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
+/*Calculates resulting coordinates of the multiplication and returns them as a new vector*/
+Vector2 Vector2::operator*(const Vector2& aVector2) const
+{
+	float xValue = x * aVector2.x;
+	float yValue = y * aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
+/*Calculates resulting coordinates of the division and returns them as a new vector*/
+Vector2 Vector2::operator/(const Vector2& aVector2) const
+{
+	if (aVector2.x == 0) throw "Can't divide by zero";
+	if (aVector2.y == 0) throw "Can't divide by zero";
+
+	float xValue = x / aVector2.x;
+	float yValue = y / aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
+bool Vector2::operator==(const Vector2& aVector2)const
+{
+	return x == aVector2.x && y == aVector2.y;
+}
+
+bool Vector2::operator!=(const Vector2& aVector2)const
+{
+	return x != aVector2.x || y != aVector2.y;
+}
+
+/*Calculates resulting coordinates of the multiplication by a value and returns them as a new vector*/
+Vector2 operator*(float value, const Vector2& aVector2)
+{
+	float xValue = value * aVector2.x;
+	float yValue = value * aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
+/*Calculates resulting coordinates of the multiplication by a value and returns them as a new vector*/
+Vector2 operator*(const Vector2& aVector2, float value)
+{
+	float xValue = value * aVector2.x;
+	float yValue = value * aVector2.y;
+
+	return Vector2(xValue, yValue);
+}
+
