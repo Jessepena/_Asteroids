@@ -3,47 +3,78 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
+const int screenWidth = 568;
+const int screenHeight = 320;
+
 Player::Player()
 {
 	position = Vector2();
+	thrusterOn = false;
+
 }
 
-void Player::Update(SDL_KeyboardEvent keyBoardEvent)
+
+void Player::move(Vector2 positionToMove, SDL_KeyboardEvent event)
 {
-	switch (keyBoardEvent.keysym.scancode)
-	{
-	case SDL_SCANCODE_S:
-		position.y-=10;
-		break;
-
-	case SDL_SCANCODE_W:
-		position.y+=10;
-		break;
-
-	case SDL_SCANCODE_A:
-		position.x-=10;
-		break;
-
-	case SDL_SCANCODE_D:
-		position.x+=10;
-		break;
-	default:
-		SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
-		break;
-	}
+	Warping();
+	Player::position += positionToMove;
+	
 }
+void Player::Update(SDL_KeyboardEvent keyBoardEvent){}
 
 void Player::Render()
 {
 	glLoadIdentity();
 	glTranslatef(position.x, position.y, 0.0f);
 	
-	//Draw triangle
+	//Draw ship
 	glBegin(GL_LINE_LOOP);
-	glVertex2f(0.0 + position.x, 50.0 + position.y);
-	glVertex2f(50.0 + position.x, -50.0 + position.y);
-	glVertex2f(-50.0 + position.x, -50.0 + position.y);
+	glVertex2f(0.0f, 20.0f);
+	glVertex2f(12.0f, -10.0f);
+	glVertex2f(6.0f, -4.0f);
+	glVertex2f(-6.0f, -4.0f);
+	glVertex2f(-12.0f, -10.0f);
 	glEnd();
+	Thruster();
+}
+
+void Player::Thruster() {
+
+	if (thrusterOn) {
+		glBegin(GL_LINE_LOOP);
+		glVertex2f(-5.0, -4.0);
+		glVertex2f(5.0, -4.0);
+		glVertex2f(0.0, -15.0);
+		glEnd();
+	}
+}
+
+void Player::Warping() {
+
+	// X axis warping
+	if (position.x < -screenWidth)
+	{
+		position.x = screenWidth;
+	}
+	else if (position.x > screenWidth) 
+	{
+		position.x = -screenWidth;
+	}
+
+	// Y axis warping
+	if (position.y < -screenHeight) 
+	{
+		position.y = screenHeight;
+	}
+	else if (position.y > screenHeight) 
+	{
+		position.y = -screenHeight;
+	}
 }
 
 
+void Player::MoveForward() {}
+
+void Player::RotateLeft() {}
+
+void Player::RotateRight() {}

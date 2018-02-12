@@ -79,8 +79,35 @@ namespace Engine
 	}
 
 	void App::OnKeyDown(SDL_KeyboardEvent keyBoardEvent)
-	{		
-		player.Update(keyBoardEvent);
+	{	
+		
+		switch (keyBoardEvent.keysym.scancode)
+		{
+		case SDL_SCANCODE_DOWN:
+		case SDL_SCANCODE_S:
+			player.move(Vector2(0.0f,-10.0f), keyBoardEvent);
+			break;
+
+		case SDL_SCANCODE_UP:
+		case SDL_SCANCODE_W:
+			player.thrusterOn = true;
+			player.move(Vector2(0.0f, 10.0f), keyBoardEvent);
+			break;
+
+		case SDL_SCANCODE_LEFT:
+		case SDL_SCANCODE_A:
+			player.move(Vector2(-10.0f, 0.0f), keyBoardEvent);
+			break;
+
+		case SDL_SCANCODE_RIGHT:
+		case SDL_SCANCODE_D:
+			player.move(Vector2(10.0f, 0.0f), keyBoardEvent);
+			break;
+
+		default:
+			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
+			break;
+		}
 	}
 
 	void App::OnKeyUp(SDL_KeyboardEvent keyBoardEvent)
@@ -89,6 +116,11 @@ namespace Engine
 		{
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
+			break;
+
+		case SDL_SCANCODE_UP:
+		case SDL_SCANCODE_W:
+			player.thrusterOn = false;
 			break;
 		default:
 			//DO NOTHING
@@ -124,14 +156,7 @@ namespace Engine
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		player.Render();
-		/*
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(50.0, 50.0);
-		glVertex2f(50.0, -50.0);
-		glVertex2f(-50.0, -50.0);
-		glVertex2f(-50.0, 50.0);
-		glEnd();
-		*/
+		
 		SDL_GL_SwapWindow(m_mainWindow);
 		
 	}

@@ -11,6 +11,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="vector_2.cpp" />
     <ClCompile Include="vector_3.cpp" />
+    <ClCompile Include="vector_4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
@@ -21,6 +22,7 @@
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="vector_2.hpp" />
     <ClInclude Include="vector_3.hpp" />
+    <ClInclude Include="vector_4.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
