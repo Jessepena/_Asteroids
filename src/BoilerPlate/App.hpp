@@ -1,6 +1,7 @@
 #pragma once
 #ifndef APP_HPP
 #define APP_HPP
+#include "Entity.h"
 
 // C++ STL
 #include <string>

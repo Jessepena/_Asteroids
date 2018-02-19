@@ -1,16 +1,18 @@
 #pragma once
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
-#include "Vector_2.hpp"
-#include "SDLEvent.hpp"
+#include "Entity.h"
 
 
-class Player
+class Player : public Entity
 {
 
 private:
+
 	/*MEMBERS*/
-	Vector2 position;
+	bool thrusterOn;
+	std::vector<Vector2> thrusterPoints;
+	
 
 public:
 	
@@ -18,18 +20,17 @@ public:
 	Player();
 
 	/*PUBLIC MEMBERS*/
-	bool thrusterOn;
+	
 
 	/*FUNCTIONS*/
-	void Update(SDL_KeyboardEvent);
-	void Render();
-	void move(Vector2 position, SDL_KeyboardEvent event);
-	void Warping();
+	void Update(SDL_KeyboardEvent keyBoardEvent);
+	void Render() override;
 	void MoveForward();
-	void RotateLeft();
-	void RotateRight();
+	void RotateLeft(float angle);
+	void RotateRight(float angle);
 	void Thruster();
-	Vector2 getPosition();
+	void setThrusterOn(bool);
+	
 };
 
 	

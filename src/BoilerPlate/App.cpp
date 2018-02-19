@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Player.hpp"
+#include "Asteroid.hpp"
 
 // OpenGL includes
 #include <GL/glew.h>
@@ -9,9 +10,11 @@
 
 namespace Engine
 {
+	
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
 	Player player;
+	Asteroid asteroid(Asteroid::AsteroidSize::Size::BIG);
 
 	App::App(const std::string& title, const int width, const int height)
 		: m_title(title)
@@ -85,23 +88,23 @@ namespace Engine
 		{
 		case SDL_SCANCODE_DOWN:
 		case SDL_SCANCODE_S:
-			player.move(Vector2(0.0f,-10.0f), keyBoardEvent);
 			break;
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			player.thrusterOn = true;
-			player.move(Vector2(0.0f, 10.0f), keyBoardEvent);
+			player.setThrusterOn(true);
+			player.MoveForward();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
-			player.move(Vector2(-10.0f, 0.0f), keyBoardEvent);
+			player.RotateLeft(10);
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
-			player.move(Vector2(10.0f, 0.0f), keyBoardEvent);
+			player.RotateRight(10);
+			
 			break;
 
 		default:
@@ -120,7 +123,7 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			player.thrusterOn = false;
+			player.setThrusterOn(false);
 			break;
 		default:
 			//DO NOTHING
@@ -134,6 +137,7 @@ namespace Engine
 
 		// Update code goes here
 		//
+		
 
 		double endTime = m_timer->GetElapsedTimeInSeconds();
 		double nextTimeFrame = startTime + DESIRED_FRAME_TIME;
@@ -149,6 +153,8 @@ namespace Engine
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 
 		m_nUpdates++;
+
+		
 	}
 
 	void App::Render()
@@ -156,7 +162,7 @@ namespace Engine
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		player.Render();
-		
+		asteroid.Render();
 		SDL_GL_SwapWindow(m_mainWindow);
 		
 	}

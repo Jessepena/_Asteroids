@@ -1,11 +1,15 @@
 #ifndef MATHUTILITIES_H_INCLUDED
 #define MATHUTILITIES_H_INCLUDED
-#include "math.h"
+#include <math.h>
+#include <cmath>
+#include <cstdlib>
 #include "stdarg.h"
-#include "MathUtilities.cpp"
+#include <vector>
+#define M_PI 3.14159265358979323846
 
-struct MathUtilities
+class MathUtilities
 {
+public:
 	int floatRoundToInt(float x);
 	int floatRoundToEvenInt(float x);
     template <class T>
@@ -20,13 +24,19 @@ struct MathUtilities
     T GetMin (T a, T b, T c);
     template <class T>
     T GetMin(T a, T b, T c, T d);
-	int angleConvert(int i, int x);
+	
+	float degreesToRadians(float angle);
+
+	float radiansToDegrees(float angle);
 	int angularDistance(int x, int x2);
 	template <class T>
     T clamp(T x, T Min, T Max);
 	bool isPowerOfTwo(int x);
 	int floatInterpolate(float x, int Min, int Max);
 
+	float randInRange(int, int);
+
 };
+
 
 #endif // MATHUTILITIES_H_INCLUDED

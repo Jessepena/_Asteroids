@@ -1,16 +1,16 @@
 #include "MathUtilities.h"
-#define M_PI 3.14159265358979323846
+
 
 template <class T>
 
-T GetMax (T a, T b) {
+T MathUtilities::GetMax (T a, T b) {
   T result;
   result = (a>b)? a : b;
   return result;
 }
 
 template <class T>
-T GetMax (T a, T b, T c) {
+T MathUtilities::GetMax (T a, T b, T c) {
   T result = a;
   if(b>result)
     result = b;
@@ -19,7 +19,7 @@ T GetMax (T a, T b, T c) {
   return result;
 }
 template <class T>
-T GetMax (T a, T b, T c, T d) {
+T MathUtilities::GetMax (T a, T b, T c, T d) {
   T result = a;
   if(b>result)
     result = b;
@@ -30,13 +30,13 @@ T GetMax (T a, T b, T c, T d) {
   return result;
 }
 template <class T>
-T GetMin (T a, T b) {
+T MathUtilities::GetMin (T a, T b) {
   T result;
   result = (a<b)? a : b;
   return result;
 }
 template <class T>
-T GetMin (T a, T b, T c) {
+T MathUtilities::GetMin (T a, T b, T c) {
   T result = a;
   if(b < result)
     result = b;
@@ -45,7 +45,7 @@ T GetMin (T a, T b, T c) {
   return result;
 }
 template <class T>
-T GetMin(T a, T b, T c, T d) {
+T MathUtilities::GetMin(T a, T b, T c, T d) {
   T result = a;
   if(b < result)
     result = b;
@@ -56,13 +56,13 @@ T GetMin(T a, T b, T c, T d) {
   return result;
 }
 
-int floatRoundToInt(float x)
+int MathUtilities::floatRoundToInt(float x)
 {
 	int i = roundf(x);
 	return i;
 }
 
-int floatRoundToEvenInt(float x)
+int MathUtilities::floatRoundToEvenInt(float x)
 {
     int i = x;
     if(i % 2 != 0)
@@ -71,21 +71,19 @@ int floatRoundToEvenInt(float x)
     return i;
 }
 
-int angleConvert(int i, int x)
+
+float MathUtilities::degreesToRadians(float angle)
 {
-    int result = -1;
-    if(i==1)
-    {
-        result = (x*M_PI)/180;
-    }
-    else if(i==2)
-    {
-        result = (x*180)/M_PI;
-    }
-    return result;
+	return angle * (M_PI / 180);
 }
 
-int angularDistance(int x, int x2)
+float MathUtilities::radiansToDegrees(float angle)
+{
+	return angle * (180 / M_PI);
+}
+
+
+int MathUtilities::angularDistance(int x, int x2)
 {
     int result = x2-x;
     if(result < 0)
@@ -94,7 +92,7 @@ int angularDistance(int x, int x2)
 }
 
 template <class T>
- T clamp(T x, T Min, T Max)
+ T MathUtilities::clamp(T x, T Min, T Max)
  {
      if(x < Min)
         x = Min;
@@ -104,7 +102,7 @@ template <class T>
      return x;
  }
 
- bool isPowerOfTwo(int x)
+ bool MathUtilities::isPowerOfTwo(int x)
  {
      bool value = false;
      for(int i=2;i<=x;i*=2)
@@ -115,7 +113,7 @@ template <class T>
      return value;
  }
 
- int floatInterpolate(float x, int Min, int Max)
+ int MathUtilities::floatInterpolate(float x, int Min, int Max)
  {
      int range = Max - Min, result = -1;
 
@@ -127,3 +125,10 @@ template <class T>
 
      return result;
  }
+
+ float MathUtilities::randInRange(int min, int max)
+ {
+	 return min + (max - min) * (rand() / (float)RAND_MAX);
+ }
+
+

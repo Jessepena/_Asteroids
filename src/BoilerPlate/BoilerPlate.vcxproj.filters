@@ -12,6 +12,9 @@
     <ClCompile Include="vector_2.cpp" />
     <ClCompile Include="vector_3.cpp" />
     <ClCompile Include="vector_4.cpp" />
+    <ClCompile Include="MathUtilities.cpp" />
+    <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.hpp" />
@@ -23,6 +26,9 @@
     <ClInclude Include="vector_2.hpp" />
     <ClInclude Include="vector_3.hpp" />
     <ClInclude Include="vector_4.hpp" />
+    <ClInclude Include="MathUtilities.h" />
+    <ClInclude Include="Asteroid.hpp" />
+    <ClInclude Include="Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
