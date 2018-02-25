@@ -1,8 +1,8 @@
 #include "App.hpp"
 #include <iostream>
 #include <algorithm>
-#include "Player.hpp"
-#include "Asteroid.hpp"
+#include "Game.hpp"
+#include <vector>
 
 // OpenGL includes
 #include <GL/glew.h>
@@ -14,7 +14,11 @@ namespace Engine
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
 	Player player;
-	Asteroid asteroid(Asteroid::AsteroidSize::Size::BIG);
+	Game game;
+	
+	bool isThrusting;
+	
+	
 
 	App::App(const std::string& title, const int width, const int height)
 		: m_title(title)
@@ -35,6 +39,7 @@ namespace Engine
 
 	void App::Execute()
 	{
+
 		if (m_state != GameState::INIT_SUCCESSFUL)
 		{
 			std::cerr << "Game INIT was not successful." << std::endl;
@@ -61,6 +66,7 @@ namespace Engine
 
 	bool App::Init()
 	{
+	
 		// Init the external dependencies
 		//
 		bool success = SDLInit() && GlewInit();
@@ -92,20 +98,46 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			player.setThrusterOn(true);
-			player.MoveForward();
+	        game.player.MoveForward();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
-			player.RotateLeft(10);
+			game.player.RotateLeft(10);
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
-			player.RotateRight(10);
-			
+			game.player.RotateRight(10);
 			break;
+
+		case SDL_SCANCODE_N:
+			game.asteroidVector.push_back(Asteroid());
+			break;
+
+		case SDL_SCANCODE_M:
+			if(game.asteroidVector.size() != 0)
+				game.asteroidVector.pop_back();
+			break;
+
+		case SDL_SCANCODE_Y:
+			if (game.debuggingOn)
+			{
+				game.debuggingOn = false;
+				game.player.setDebuggingOn(false);
+				for (int i = 0; i < game.asteroidVector.size(); i++)	
+					game.asteroidVector[i].setDebuggingOn(false);		
+			}
+			else
+			{
+				game.debuggingOn = true;
+				game.player.setDebuggingOn(true);
+				for (int i = 0; i < game.asteroidVector.size(); i++)
+					game.asteroidVector[i].setDebuggingOn(true);
+			}
+			break;
+
+		
 
 		default:
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
@@ -123,7 +155,8 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			player.setThrusterOn(false);
+			game.player.setThrusterOn(false);
+			isThrusting = game.player.getThrusterOn();
 			break;
 		default:
 			//DO NOTHING
@@ -137,6 +170,7 @@ namespace Engine
 
 		// Update code goes here
 		//
+		game.Update(DESIRED_FRAME_TIME);
 		
 
 		double endTime = m_timer->GetElapsedTimeInSeconds();
@@ -153,7 +187,6 @@ namespace Engine
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 
 		m_nUpdates++;
-
 		
 	}
 
@@ -161,8 +194,7 @@ namespace Engine
 	{
 		glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		player.Render();
-		asteroid.Render();
+		game.Render();
 		SDL_GL_SwapWindow(m_mainWindow);
 		
 	}
@@ -262,7 +294,11 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-
+		game.player.updateFrame(width/2, height/2);
+		for (int i = 0; i < game.asteroidVector.size(); i++)
+		{
+			game.asteroidVector[i].updateFrame(width/2, height/2);
+		}
 		SetupViewport();
 	}
 

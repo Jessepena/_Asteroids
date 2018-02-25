@@ -11,19 +11,28 @@ MathUtilities mathUtilities;
 Asteroid::Asteroid() : Entity()
 {
 	std::vector<Vector2> pointsToPush;
-	pointsToPush.push_back(Vector2(25.0f, 50.0f));
-	pointsToPush.push_back(Vector2(25.0f, 25.0f));
-	pointsToPush.push_back(Vector2(-30.0f, -25.0f));
-	pointsToPush.push_back(Vector2(-50.0f, -25.0f));
-	pointsToPush.push_back(Vector2(-30.0f, -40.0f));
-	pointsToPush.push_back(Vector2(50.0f, -60.0f));
-	pointsToPush.push_back(Vector2(40.0f, -40.0f));
-	pointsToPush.push_back(Vector2(60.0f, -30.0f));
-	pointsToPush.push_back(Vector2(60.0f, 30.0f));
-	pointsToPush.push_back(Vector2(35.0f, 45.0f));
+	pointsToPush.push_back(Vector2(0.0f*(2.00), 30.0f*(2.00)));
+	pointsToPush.push_back(Vector2(15.0f*(2.00), 20.0f*(2.00)));
+	pointsToPush.push_back(Vector2(25.0f*(2.00), 10.0f*(2.00)));
+	pointsToPush.push_back(Vector2(20.0f*(2.00), 5.0f*(2.00)));
+	pointsToPush.push_back(Vector2(25.0f*(2.00), 0.0f*(2.00)));
+	pointsToPush.push_back(Vector2(25.0f*(2.00), -10.0f*(2.00)));
+	pointsToPush.push_back(Vector2(15.0f*(2.00), -20.0f*(2.00)));
+	pointsToPush.push_back(Vector2(0.0f*(2.00), -25.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-15.0f*(2.00), -20.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-25.0f*(2.00), -10.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-20.0f*(2.00), -5.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-25.0f*(2.00), 0.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-25.0f*(2.00), 10.0f*(2.00)));
+	pointsToPush.push_back(Vector2(-15.0f*(2.00), 20.0f*(2.00)));
 	setPoints(pointsToPush);
+	setPosition(Vector2(mathUtilities.randInRange(0,1000), mathUtilities.randInRange(0, 1000)));
 	angle = 45;
+	setOrientation(mathUtilities.randInRange(1, 360));
 	size = Asteroid::AsteroidSize::BIG;
+	setMass(3);
+	move();
+	setRadius(55);
 
 }
 
@@ -33,50 +42,71 @@ Asteroid::Asteroid(AsteroidSize::Size newSize) : Entity()
 	std::vector<Vector2> pointsToPush;
 	if (size == 4)
 	{
-		pointsToPush.push_back(Vector2(25.0f, 50.0f));
-		pointsToPush.push_back(Vector2(25.0f, 25.0f));
-		pointsToPush.push_back(Vector2(-30.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-50.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-30.0f, -40.0f));
-		pointsToPush.push_back(Vector2(50.0f, -60.0f));
-		pointsToPush.push_back(Vector2(40.0f, -40.0f));
-		pointsToPush.push_back(Vector2(60.0f, -30.0f));
-		pointsToPush.push_back(Vector2(60.0f, 30.0f));
-		pointsToPush.push_back(Vector2(35.0f, 45.0f));
-		
-	
+		pointsToPush.push_back(Vector2(0.0f*(2.00), 30.0f*(2.00)));
+		pointsToPush.push_back(Vector2(15.0f*(2.00), 20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), 10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(20.0f*(2.00), 5.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), 0.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), -10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(15.0f*(2.00), -20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(0.0f*(2.00), -25.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-15.0f*(2.00), -20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), -10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-20.0f*(2.00), -5.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), 0.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), 10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-15.0f*(2.00), 20.0f*(2.00)));
 		setPoints(pointsToPush);
+		setMass(3);
+		angle = 45;
+		setRadius(55);
 	}
 	else if (size == 2)
 	{
-		pointsToPush.push_back(Vector2(25.0f*(0.5), 50.0f*(0.5)));
-		pointsToPush.push_back(Vector2(25.0f*(0.5), 25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.5), -25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-50.0f*(0.5), -25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.5), -40.0f*(0.5)));
-		pointsToPush.push_back(Vector2(50.0f*(0.5), -60.0f*(0.5)));
-		pointsToPush.push_back(Vector2(40.0f*(0.5), -40.0f*(0.5)));
-		pointsToPush.push_back(Vector2(60.0f*(0.5), -30.0f*(0.5)));
-		pointsToPush.push_back(Vector2(60.0f*(0.5), 30.0f*(0.5)));
-		pointsToPush.push_back(Vector2(35.0f*(0.5), 45.0f*(0.5)));
+		pointsToPush.push_back(Vector2(0.0f, 30.0f));
+		pointsToPush.push_back(Vector2(15.0f, 20.0f));
+		pointsToPush.push_back(Vector2(25.0f, 10.0f));
+		pointsToPush.push_back(Vector2(20.0f, 5.0f));
+		pointsToPush.push_back(Vector2(25.0f, 0.0f));
+		pointsToPush.push_back(Vector2(25.0f, -10.0f));
+		pointsToPush.push_back(Vector2(15.0f, -20.0f));
+		pointsToPush.push_back(Vector2(0.0f, -25.0f));
+		pointsToPush.push_back(Vector2(-15.0f, -20.0f));
+		pointsToPush.push_back(Vector2(-25.0f, -10.0f));
+		pointsToPush.push_back(Vector2(-20.0f, -5.0f));
+		pointsToPush.push_back(Vector2(-25.0f, 0.0f));
+		pointsToPush.push_back(Vector2(-25.0f, 10.0f));
+		pointsToPush.push_back(Vector2(-15.0f, 20.0f));
 		setPoints(pointsToPush);
+		setMass(2);
+		angle = 80; 
+		setRadius(27.5);
 
 	}
 	else if (size == 1)
 	{
-		pointsToPush.push_back(Vector2(25.0f*(0.25), 50.0f*(0.25)));
-		pointsToPush.push_back(Vector2(25.0f*(0.25), 25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.25), -25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-50.0f*(0.25), -25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.25), -40.0f*(0.25)));
-		pointsToPush.push_back(Vector2(50.0f*(0.25), -60.0f*(0.25)));
-		pointsToPush.push_back(Vector2(40.0f*(0.25), -40.0f*(0.25)));
-		pointsToPush.push_back(Vector2(60.0f*(0.25), -30.0f*(0.25)));
-		pointsToPush.push_back(Vector2(60.0f*(0.25), 30.0f*(0.25)));
-		pointsToPush.push_back(Vector2(35.0f*(0.25), 45.0f*(0.25)));
+		pointsToPush.push_back(Vector2(0.0f*(0.75), 30.0f*(0.75)));
+		pointsToPush.push_back(Vector2(15.0f*(0.75), 20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), 10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(20.0f*(0.75), 5.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), 0.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), -10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(15.0f*(0.75), -20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(0.0f*(0.75), -25.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-15.0f*(0.75), -20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), -10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-20.0f*(0.75), -5.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), 0.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), 10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-15.0f*(0.75), 20.0f*(0.75)));
 		setPoints(pointsToPush);
+		setMass(1);
+		angle = 120;
+		setRadius(20);
 	}
-	angle = 45;
+	
+	setOrientation(mathUtilities.randInRange(1, 360));
+	move();
 }
 
 Asteroid::Asteroid(Vector2 newPosition, AsteroidSize::Size newSize) : Entity()
@@ -86,49 +116,70 @@ Asteroid::Asteroid(Vector2 newPosition, AsteroidSize::Size newSize) : Entity()
 	std::vector<Vector2> pointsToPush;
 	if (size == 4)
 	{
-		pointsToPush.push_back(Vector2(25.0f, 50.0f));
-		pointsToPush.push_back(Vector2(25.0f, 25.0f));
-		pointsToPush.push_back(Vector2(-30.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-50.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-30.0f, -40.0f));
-		pointsToPush.push_back(Vector2(50.0f, -60.0f));
-		pointsToPush.push_back(Vector2(40.0f, -40.0f));
-		pointsToPush.push_back(Vector2(60.0f, -30.0f));
-		pointsToPush.push_back(Vector2(60.0f, 30.0f));
-		pointsToPush.push_back(Vector2(35.0f, 45.0f));
+		pointsToPush.push_back(Vector2(0.0f*(2.00), 30.0f*(2.00)));
+		pointsToPush.push_back(Vector2(15.0f*(2.00), 20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), 10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(20.0f*(2.00), 5.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), 0.0f*(2.00)));
+		pointsToPush.push_back(Vector2(25.0f*(2.00), -10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(15.0f*(2.00), -20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(0.0f*(2.00), -25.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-15.0f*(2.00), -20.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), -10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-20.0f*(2.00), -5.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), 0.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-25.0f*(2.00), 10.0f*(2.00)));
+		pointsToPush.push_back(Vector2(-15.0f*(2.00), 20.0f*(2.00)));
 		setPoints(pointsToPush);
+		setMass(3);
+		angle = 45;
+		setRadius(55);
 	}
 	else if (size == 2)
 	{
-		pointsToPush.push_back(Vector2(25.0f*(0.5), 50.0f*(0.5)));
-		pointsToPush.push_back(Vector2(25.0f*(0.5), 25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.5), -25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-50.0f*(0.5), -25.0f*(0.5)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.5), -40.0f*(0.5)));
-		pointsToPush.push_back(Vector2(50.0f*(0.5), -60.0f*(0.5)));
-		pointsToPush.push_back(Vector2(40.0f*(0.5), -40.0f*(0.5)));
-		pointsToPush.push_back(Vector2(60.0f*(0.5), -30.0f*(0.5)));
-		pointsToPush.push_back(Vector2(60.0f*(0.5), 30.0f*(0.5)));
-		pointsToPush.push_back(Vector2(35.0f*(0.5), 45.0f*(0.5)));
+		pointsToPush.push_back(Vector2(0.0f, 30.0f));
+		pointsToPush.push_back(Vector2(15.0f, 20.0f));
+		pointsToPush.push_back(Vector2(25.0f, 10.0f));
+		pointsToPush.push_back(Vector2(20.0f, 5.0f));
+		pointsToPush.push_back(Vector2(25.0f, 0.0f));
+		pointsToPush.push_back(Vector2(25.0f, -10.0f));
+		pointsToPush.push_back(Vector2(15.0f, -20.0f));
+		pointsToPush.push_back(Vector2(0.0f, -25.0f));
+		pointsToPush.push_back(Vector2(-15.0f, -20.0f));
+		pointsToPush.push_back(Vector2(-25.0f, -10.0f));
+		pointsToPush.push_back(Vector2(-20.0f, -5.0f));
+		pointsToPush.push_back(Vector2(-25.0f, 0.0f));
+		pointsToPush.push_back(Vector2(-25.0f, 10.0f));
+		pointsToPush.push_back(Vector2(-15.0f, 20.0f));
 		setPoints(pointsToPush);
-
+		setMass(2);
+		angle = 80;
+		setRadius(27.5);
 	}
 	else if (size == 1)
 	{
-		pointsToPush.push_back(Vector2(25.0f*(0.25), 50.0f*(0.25)));
-		pointsToPush.push_back(Vector2(25.0f*(0.25), 25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.25), -25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-50.0f*(0.25), -25.0f*(0.25)));
-		pointsToPush.push_back(Vector2(-30.0f*(0.25), -40.0f*(0.25)));
-		pointsToPush.push_back(Vector2(50.0f*(0.25), -60.0f*(0.25)));
-		pointsToPush.push_back(Vector2(40.0f*(0.25), -40.0f*(0.25)));
-		pointsToPush.push_back(Vector2(60.0f*(0.25), -30.0f*(0.25)));
-		pointsToPush.push_back(Vector2(60.0f*(0.25), 30.0f*(0.25)));
-		pointsToPush.push_back(Vector2(35.0f*(0.25), 45.0f*(0.25)));
+		pointsToPush.push_back(Vector2(0.0f*(0.75), 30.0f*(0.75)));
+		pointsToPush.push_back(Vector2(15.0f*(0.75), 20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), 10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(20.0f*(0.75), 5.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), 0.0f*(0.75)));
+		pointsToPush.push_back(Vector2(25.0f*(0.75), -10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(15.0f*(0.75), -20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(0.0f*(0.75), -25.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-15.0f*(0.75), -20.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), -10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-20.0f*(0.75), -5.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), 0.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-25.0f*(0.75), 10.0f*(0.75)));
+		pointsToPush.push_back(Vector2(-15.0f*(0.75), 20.0f*(0.75)));
 		setPoints(pointsToPush);
-
+		setMass(1);
+		angle = 120;
+		setRadius(20);
 	}
-	angle = 45;
+	
+	setOrientation(mathUtilities.randInRange(1, 360));
+	move();
 
 }
 
@@ -137,18 +188,22 @@ Asteroid::AsteroidSize::Size Asteroid::GetSize()
 	return size;
 }
 
-void Asteroid::Update() 
+void Asteroid::Update(float deltaTime)
 {
-
+	angle += mathUtilities.randInRange(120, 150) * deltaTime;
+	Entity::Update(deltaTime);
 }
 
 void Asteroid::Render()
 {
 	Vector2 position = getPosition();
 	std::vector<Vector2> points = getPoints();
+
 	glLoadIdentity();
 	glTranslatef(position.x, position.y, 0.0f);
 	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	glBegin(GL_LINE_LOOP);
 	for (Vector2 i : points)
@@ -157,11 +212,21 @@ void Asteroid::Render()
 	}
 	glEnd();
 
+
+	if(getDebuggingOn())
+		drawHollowCircle(position.x, position.y, getRadius());
+
 }
 
 void Asteroid::move()
 {
-	
+	MathUtilities mathUtilities;
+	float asteroidOrientation = getOrientation();
+	if (getMass() > 0)
+	{
+		Vector2 velocityToAdd(-((mathUtilities.randInRange(100,200) / getMass()) * sinf(mathUtilities.degreesToRadians(asteroidOrientation))), (mathUtilities.randInRange(100,200) / getMass()) * cosf(mathUtilities.degreesToRadians(asteroidOrientation)));
+		setVelocity(velocityToAdd);
+	}
 }
 
 

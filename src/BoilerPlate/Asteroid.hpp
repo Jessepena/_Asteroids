@@ -31,7 +31,7 @@ public:
 
 
 	/*FUNCTIONS*/
-	void Update();
+	void Update(float);
 	void Render() override;
 	void move();
 	AsteroidSize::Size GetSize();

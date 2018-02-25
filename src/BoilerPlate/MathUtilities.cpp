@@ -128,7 +128,12 @@ template <class T>
 
  float MathUtilities::randInRange(int min, int max)
  {
-	 return min + (max - min) * (rand() / (float)RAND_MAX);
+	
+	 return rand() % max + min;
  }
 
+ float MathUtilities::calculateDistance(float x1, float y1, float x2, float y2)
+ {
+	 return fabs(sqrtf(powf((x2 - x1), 2) + powf((y2 - y1), 2)));
+ }
 

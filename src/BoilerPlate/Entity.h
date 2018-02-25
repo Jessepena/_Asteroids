@@ -4,42 +4,60 @@
 #include "Vector_2.hpp"
 #include "SDLEvent.hpp"
 #include "MathUtilities.h"
+#include "ColorPalette.h"
 
 
-const int screenWidth = 568;
-const int screenHeight = 320;
 
 class  Entity
 {
-private:
-	/*MEMBERS*/
-	Vector2 position;
-	float mass;
-	float orientation;
-	Vector2 velocity;
-	std::vector<Vector2> points;
+		
+	private:
 
-public:
+		/*MEMBERS*/
+		int screenWidth = 568;
+		int screenHeight = 320;
+		Vector2 position;
+		float mass;
+		float orientation;
+		Vector2 velocity;
+		std::vector<Vector2> points;
+		bool debuggingOn;
+		float radius;
 
-	/*CTOR*/
-	Entity();
-	~Entity();
+	public:
 
-	/*PUBLIC MEMBERS*/
+		/*CTOR*/
+		Entity();
+		~Entity();
+
+		/*PUBLIC MEMBERS*/
 	
 
-	/*FUNCTIONS*/
-	void Update(float);
-	virtual void Render() = 0;
-	void Warping();
-	void addOrientation(float orientationToAdd);
-	void addPosition(Vector2);
-	void setPosition(Vector2);
-	Vector2 getPosition();
-	Vector2 getVelocity();
-	void setPoints(std::vector<Vector2>);
-	std::vector<Vector2> getPoints();
-	float getOrientation();
+		/*FUNCTIONS*/
+		//void Update(float, bool);
+		virtual void Update(float); 
+		virtual void Render() = 0;
+		void updateFrame(int, int);
+		void Warping();
+		void addOrientation(float orientationToAdd);
+		void setOrientation(float orientationToAdd);
+		void addPosition(Vector2);
+		void setPosition(Vector2);
+		Vector2 getPosition();
+		Vector2 getVelocity();
+		void addVelocity(Vector2);
+		void setVelocity(Vector2);
+		void setPoints(std::vector<Vector2>);
+		std::vector<Vector2> getPoints();
+		float getOrientation();
+		float getMass();
+		void setMass(float);
+		void drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius);
+		void setRadius(float);
+		float getRadius();
+		bool getDebuggingOn();
+		void setDebuggingOn(bool);
+
 	
 
 };

@@ -29,7 +29,7 @@ Vector2::Vector2(float value)
 /*Returns vector's length*/
 float Vector2::Length() const
 {
-	return sqrt(x * x + y * y);
+	return std::fabs(std::sqrtf(x * x + y * y));
 }
 
 /*Returns length raised to the power of 2*/
