@@ -4,8 +4,6 @@
 Game::Game()
 {
 	asteroidVector.push_back(Asteroid(Asteroid::AsteroidSize::Size::BIG));
-	bulletReset = 0.0f;
-	bulletDeleteCount = 0;
 }
 Game::~Game()
 {
@@ -14,7 +12,8 @@ Game::~Game()
 
 void Game::playerShoot()
 {
-	bulletVector.push_back(player.Shoot());
+	if(bulletVector.size() <= 5)
+		bulletVector.push_back(player.Shoot());
 }
 
 void Game::setDebug()
@@ -147,11 +146,26 @@ void Game::updateBullets(float deltaTime)
 }
 void Game::Update(float deltaTime)
 {
+	if (inputManager.get_w_key() || inputManager.get_up_key())
+	{
+		player.MoveForward();
+	}
+	else
+		player.setThrusterOn(false);
+	if (inputManager.get_a_key() || inputManager.get_left_key())
+	{
+		player.RotateLeft(5);
+	}
+	if (inputManager.get_d_key() || inputManager.get_right_key())
+	{
+		player.RotateRight(5);
+	}
+
 	updateAsteroidsDebugging();
 	updateBulletCollision();
 	updatePlayerCollision();
 
-	
+
 	player.Update(deltaTime);
 
 	for (int i = 0; i<bulletVector.size(); i++)

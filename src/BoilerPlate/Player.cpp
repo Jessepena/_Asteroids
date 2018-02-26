@@ -4,7 +4,7 @@
 #include <SDL2/SDL_opengl.h>
 
 const float maxVelocity = 350.0f;
-const float frictionFactor = 0.99f;
+const float frictionFactor = 0.98f;
 
 Player::Player() : Entity()
 {
@@ -134,7 +134,7 @@ void Player::MoveForward()
 	float shipOrientation = getOrientation();
 	if (getMass() > 0)
 	{
-		Vector2 velocityToAdd(-((10 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (10 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
+		Vector2 velocityToAdd(-((5 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (5 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
 		addVelocity(velocityToAdd);
 	}
 }

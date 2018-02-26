@@ -15,8 +15,6 @@ namespace Engine
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
 	Game game;
 	
-	bool isThrusting;
-	
 	
 
 	App::App(const std::string& title, const int width, const int height)
@@ -91,31 +89,36 @@ namespace Engine
 		
 		switch (keyBoardEvent.keysym.scancode)
 		{
-		case SDL_SCANCODE_DOWN:
-		case SDL_SCANCODE_S:
-			break;
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-	        game.player.MoveForward();
+			game.inputManager.set_up_key(true);
+			game.inputManager.set_w_key(true);
+	        //game.player.MoveForward();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
-			game.player.RotateLeft(10);
+			game.inputManager.set_left_key(true);
+			game.inputManager.set_a_key(true);
+			//game.player.RotateLeft(10);
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
-			game.player.RotateRight(10);
+			game.inputManager.set_right_key(true);
+			game.inputManager.set_d_key(true);
+			//game.player.RotateRight(10);
 			break;
 
 		case SDL_SCANCODE_N:
+			//game.inputManager.set_n_key(true);
 			if(game.debuggingOn)
 				game.asteroidVector.push_back(Asteroid());
 			break;
 
 		case SDL_SCANCODE_M:
+			//game.inputManager.set_m_key(true);
 			if (game.debuggingOn)
 			{
 				if (game.asteroidVector.size() != 0)
@@ -124,6 +127,7 @@ namespace Engine
 			break;
 
 		case SDL_SCANCODE_Y:
+			//game.inputManager.set_y_key(true);
 			game.setDebug();
 			break;
 				
@@ -144,9 +148,25 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			game.player.setThrusterOn(false);
-			isThrusting = game.player.getThrusterOn();
+			game.inputManager.set_w_key(false);
+			game.inputManager.set_up_key(false);
+			//game.player.setThrusterOn(false);
 			break;
+
+		case SDL_SCANCODE_LEFT:
+		case SDL_SCANCODE_A:
+			game.inputManager.set_left_key(false);
+			game.inputManager.set_a_key(false);
+			//game.player.RotateLeft(10);
+			break;
+
+		case SDL_SCANCODE_RIGHT:
+		case SDL_SCANCODE_D:
+			game.inputManager.set_right_key(false);
+			game.inputManager.set_d_key(false);
+			//game.player.RotateRight(10);
+			break;
+
 
 		case SDL_SCANCODE_SPACE:
 			game.playerShoot();

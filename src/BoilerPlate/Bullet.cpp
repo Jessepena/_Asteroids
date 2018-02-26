@@ -27,7 +27,6 @@ Bullet::Bullet(Vector2 newPosition, float newOrientation)
 	m_life = 0;
 }
 
-
 Bullet::~Bullet()
 {
 
