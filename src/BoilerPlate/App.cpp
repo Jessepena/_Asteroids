@@ -13,7 +13,6 @@ namespace Engine
 	
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
-	Player player;
 	Game game;
 	
 	bool isThrusting;
@@ -112,32 +111,22 @@ namespace Engine
 			break;
 
 		case SDL_SCANCODE_N:
-			game.asteroidVector.push_back(Asteroid());
+			if(game.debuggingOn)
+				game.asteroidVector.push_back(Asteroid());
 			break;
 
 		case SDL_SCANCODE_M:
-			if(game.asteroidVector.size() != 0)
-				game.asteroidVector.pop_back();
+			if (game.debuggingOn)
+			{
+				if (game.asteroidVector.size() != 0)
+					game.asteroidVector.pop_back();
+			}
 			break;
 
 		case SDL_SCANCODE_Y:
-			if (game.debuggingOn)
-			{
-				game.debuggingOn = false;
-				game.player.setDebuggingOn(false);
-				for (int i = 0; i < game.asteroidVector.size(); i++)	
-					game.asteroidVector[i].setDebuggingOn(false);		
-			}
-			else
-			{
-				game.debuggingOn = true;
-				game.player.setDebuggingOn(true);
-				for (int i = 0; i < game.asteroidVector.size(); i++)
-					game.asteroidVector[i].setDebuggingOn(true);
-			}
+			game.setDebug();
 			break;
-
-		
+				
 
 		default:
 			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
@@ -158,6 +147,11 @@ namespace Engine
 			game.player.setThrusterOn(false);
 			isThrusting = game.player.getThrusterOn();
 			break;
+
+		case SDL_SCANCODE_SPACE:
+			game.playerShoot();
+			break;
+
 		default:
 			//DO NOTHING
 			break;

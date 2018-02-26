@@ -20,9 +20,7 @@ Player::Player() : Entity()
 	thrusterPoints.push_back(Vector2(0.0f, -15.0f));
 	setPoints(pointsToPush);
 	setRadius(16);
-	
 }
-
 
 void Player::Update(float deltaTime)
 {
@@ -71,7 +69,7 @@ void Player::Render()
 	// Changes the orientation
 	glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	glBegin(GL_LINE_LOOP);
 	for (Vector2 i : points)
@@ -83,19 +81,7 @@ void Player::Render()
 	if (getDebuggingOn())
 		drawHollowCircle(position.x, position.y, getRadius());
 
-	if (thrusterOn)
-	{
-		glLoadIdentity();
-		glTranslatef(position.x, position.y, 0.0f);
-		glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
-		glBegin(GL_LINE_LOOP);
-		for (Vector2 i : thrusterPoints)
-		{
-			glVertex2f(i.x, i.y);
-		}
-		glEnd();
-	}
-	
+	Thruster();
 }
 
 void Player::setThrusterOn(bool newThrusterOn)
@@ -110,15 +96,28 @@ bool Player::getThrusterOn()
 
 Bullet Player::Shoot()
 {
-	return Bullet(getVelocity(), getPosition(), getOrientation());
+	return Bullet(getPosition(), getOrientation());
 }
 
-//a esta funcion tu la llamas desde gamwe para guardar la cosa en un vector igual que asteroids pero tienese que pensar como destruirlo
-//yo tengo un contador coo un miembro de la calse bullet en el update esl se va aumentando
+void Player::Thruster() 
+{
+	if (thrusterOn) 
+	{
+		glLoadIdentity();
+		glTranslatef(getPosition().x, getPosition().y, 0.0f);
+		glRotatef(getOrientation(), 0.0f, 0.0f, 1.0f);
 
-void Player::Thruster() {
+		glColor3f(1.0f, 0.647f, 0.0f);
+		
+		glBegin(GL_POLYGON);
+		for (Vector2 i : thrusterPoints)
+		{
+			glVertex2f(i.x, i.y);
+		}
+		glEnd();
+		
+		glColor3f(1.0f, 0.0f, 0.0f);
 
-	if (thrusterOn) {
 		glBegin(GL_LINE_LOOP);
 		for (Vector2 i : thrusterPoints)
 		{

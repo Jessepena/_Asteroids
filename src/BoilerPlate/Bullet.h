@@ -10,18 +10,22 @@
 
 
 //papa, tas ahi?
+
+
 class Bullet : public Entity 
 {
-
+	
 	public:
+		/*MEMBERS*/
+		int m_life;
+
+		/*FUNCTIONS*/
 		void Update(float);
 		void Render();
-		Bullet(Vector2, Vector2, float);
+		void Move();
+		bool shouldRemove();
+		Bullet(Vector2, float);
 		~Bullet();
 };
 
-//que barbaro xd ah ya :v
-//ya has tu clase que no se como la tienes xd, pero falta esa vaina 
 #endif // ! BULLET_H_INCLUDED
-
-//que haces? xd poniendo ete bullet.h pero me ta dando un error ahi

@@ -31,7 +31,6 @@ public:
 	void Thruster();
 	void setThrusterOn(bool);
 	bool getThrusterOn();
-
 	Bullet Shoot();
 };
 

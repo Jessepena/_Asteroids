@@ -1,10 +1,12 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Vector2 newVelocity, Vector2 newPosition, float newOrientation)
+const int MAX_LIFE = 100;
+
+Bullet::Bullet(Vector2 newPosition, float newOrientation)
 {
-	setVelocity(newVelocity);
 	setPosition(newPosition);
 	setOrientation(newOrientation);
+	Move();
 	std::vector<Vector2> pointsToPush;
 	pointsToPush.push_back(Vector2(0.0f*(0.10), 30.0f*(0.10)));
 	pointsToPush.push_back(Vector2(15.0f*(0.10), 20.0f*(0.10)));
@@ -21,17 +23,24 @@ Bullet::Bullet(Vector2 newVelocity, Vector2 newPosition, float newOrientation)
 	pointsToPush.push_back(Vector2(-25.0f*(0.10), 10.0f*(0.10)));
 	pointsToPush.push_back(Vector2(-15.0f*(0.10), 20.0f*(0.10)));
 	setPoints(pointsToPush);
-	setRadius(10);
+	setRadius(3);
+	m_life = 0;
 }
 
 
 Bullet::~Bullet()
 {
+
+}
+
+bool Bullet::shouldRemove() 
+{
+	return m_life > MAX_LIFE;
 }
 
 void Bullet::Update(float deltaTime)
 {
-
+	m_life++;
 	Entity::Update(deltaTime);
 }
 
@@ -56,4 +65,21 @@ void Bullet::Render()
 		drawHollowCircle(position.x, position.y, getRadius());
 }
 
-//que paso? mira
+void Bullet::Move()
+{
+	MathUtilities mathUtilities;
+	float bulletOrientation = getOrientation();
+	if (getMass() > 0)
+	{
+		if (getVelocity().Length() < 3)
+		{
+			Vector2 velocityToAdd(-((400 / getMass()) * sinf(mathUtilities.degreesToRadians(bulletOrientation))), 400 / getMass() * cosf(mathUtilities.degreesToRadians(bulletOrientation)));
+			addVelocity(velocityToAdd);
+		}
+		else
+		{
+			Vector2 velocityToAdd(-((150 / getMass()) * sinf(mathUtilities.degreesToRadians(bulletOrientation))), 150 / getMass() * cosf(mathUtilities.degreesToRadians(bulletOrientation)));
+			addVelocity(velocityToAdd);
+		}
+	}
+}

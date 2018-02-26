@@ -6,11 +6,8 @@
 #include "MathUtilities.h"
 #include "ColorPalette.h"
 
-
-
 class  Entity
 {
-		
 	private:
 
 		/*MEMBERS*/
@@ -34,7 +31,6 @@ class  Entity
 	
 
 		/*FUNCTIONS*/
-		//void Update(float, bool);
 		virtual void Update(float); 
 		virtual void Render() = 0;
 		void updateFrame(int, int);

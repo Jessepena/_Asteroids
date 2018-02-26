@@ -33,7 +33,6 @@ Asteroid::Asteroid() : Entity()
 	setMass(3);
 	move();
 	setRadius(55);
-
 }
 
 Asteroid::Asteroid(AsteroidSize::Size newSize) : Entity()
@@ -211,7 +210,6 @@ void Asteroid::Render()
 		glVertex2f(i.x, i.y);
 	}
 	glEnd();
-
 
 	if(getDebuggingOn())
 		drawHollowCircle(position.x, position.y, getRadius());
