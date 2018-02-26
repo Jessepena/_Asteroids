@@ -24,6 +24,9 @@ public:
 	std::vector<Asteroid> asteroidVector;
 	std::vector<Bullet> bulletVector;
 	InputManager inputManager;
+	std::vector<float> framerates;
+	int framerateRenderCount;
+	int time;
 	
 
 	/*FUNCTIONS*/
@@ -31,11 +34,16 @@ public:
 	void updatePlayerCollision();
 	void updateBullets(float deltaTime);
 	void updateAsteroidsDebugging();
+	void drawFramesGraphic();
 	void setDebug();
 	void playerShoot();
 	bool isColliding(float, float);
 	void Update(float);
 	void Render();
+	void addAsteroid();
+	void removeAsteroid();
+
+	
 	Game();
 	~Game();
 };

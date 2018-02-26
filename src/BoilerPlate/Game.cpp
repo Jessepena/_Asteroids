@@ -3,7 +3,11 @@
 
 Game::Game()
 {
+	
+	framerates = std::vector <float>(300);
 	asteroidVector.push_back(Asteroid(Asteroid::AsteroidSize::Size::BIG));
+	time = 0;
+	framerateRenderCount = 0;
 }
 Game::~Game()
 {
@@ -112,9 +116,6 @@ void Game::updatePlayerCollision()
 	}
 	
 }
-//alloo que paso? 
-// perate que creo que lo toy resolviendo.. quedate viendo
-//pero no creo que a roa le guste eso asi en el update mira
 
 void Game::updateAsteroidsDebugging()
 {
@@ -133,7 +134,10 @@ void Game::updateAsteroidsDebugging()
 		}
 	}
 }
+void Game::drawFramesGraphic()
+{
 
+}
 void Game::updateBullets(float deltaTime)
 {
 	for (int i = 0; i<bulletVector.size(); i++)
@@ -146,6 +150,15 @@ void Game::updateBullets(float deltaTime)
 }
 void Game::Update(float deltaTime)
 {
+	
+	if (time >= 250) 
+		time = 0;
+	/*FRAMES*/
+	framerates[time] = deltaTime*80000;
+	time++;
+	
+	
+	/*INPUT MANAGER MOVEMENT*/
 	if (inputManager.get_w_key() || inputManager.get_up_key())
 	{
 		player.MoveForward();
@@ -161,11 +174,13 @@ void Game::Update(float deltaTime)
 		player.RotateRight(5);
 	}
 
+	/*COLLISION*/
 	updateAsteroidsDebugging();
 	updateBulletCollision();
 	updatePlayerCollision();
 
 
+	/*ENTITIES UPDATE*/
 	player.Update(deltaTime);
 
 	for (int i = 0; i<bulletVector.size(); i++)
@@ -180,6 +195,7 @@ void Game::Update(float deltaTime)
 	{
 		asteroidVector[i].Update(deltaTime);
 	}
+
 }
 
 bool Game::isColliding(float distance, float radius)
@@ -188,6 +204,21 @@ bool Game::isColliding(float distance, float radius)
 }
 void Game::Render()
 {
+	glLoadIdentity();
+
+	if (debuggingOn)
+	{
+		glBegin(GL_LINE_STRIP);
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		for (int i = 0; i < 250; i++)
+		{
+			glVertex2f(i + 280, framerates[i] - 1600);
+		}
+
+		glEnd();
+	}
+
 	player.Render();
 
 	for (int i = 0; i<asteroidVector.size(); i++)
@@ -237,5 +268,20 @@ void Game::Render()
 				glEnd();
 			}
 		}
+	}
+}
+
+void Game::addAsteroid()
+{
+	if (debuggingOn)
+		asteroidVector.push_back(Asteroid());
+}
+
+void Game::removeAsteroid()
+{
+	if (debuggingOn)
+	{
+		if (asteroidVector.size() != 0)
+			asteroidVector.pop_back();
 	}
 }

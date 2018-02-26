@@ -94,40 +94,30 @@ namespace Engine
 		case SDL_SCANCODE_W:
 			game.inputManager.set_up_key(true);
 			game.inputManager.set_w_key(true);
-	        //game.player.MoveForward();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
 			game.inputManager.set_left_key(true);
 			game.inputManager.set_a_key(true);
-			//game.player.RotateLeft(10);
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
 			game.inputManager.set_right_key(true);
 			game.inputManager.set_d_key(true);
-			//game.player.RotateRight(10);
 			break;
 
 		case SDL_SCANCODE_N:
-			//game.inputManager.set_n_key(true);
-			if(game.debuggingOn)
-				game.asteroidVector.push_back(Asteroid());
+			game.addAsteroid();
 			break;
 
 		case SDL_SCANCODE_M:
-			//game.inputManager.set_m_key(true);
-			if (game.debuggingOn)
-			{
-				if (game.asteroidVector.size() != 0)
-					game.asteroidVector.pop_back();
-			}
+			game.removeAsteroid();
+			
 			break;
 
 		case SDL_SCANCODE_Y:
-			//game.inputManager.set_y_key(true);
 			game.setDebug();
 			break;
 				
@@ -150,25 +140,23 @@ namespace Engine
 		case SDL_SCANCODE_W:
 			game.inputManager.set_w_key(false);
 			game.inputManager.set_up_key(false);
-			//game.player.setThrusterOn(false);
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
 			game.inputManager.set_left_key(false);
 			game.inputManager.set_a_key(false);
-			//game.player.RotateLeft(10);
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
 			game.inputManager.set_right_key(false);
 			game.inputManager.set_d_key(false);
-			//game.player.RotateRight(10);
 			break;
 
 
 		case SDL_SCANCODE_SPACE:
+			/*Shoot is called on OnKeyUp so the user can't keep space pressed to shoot continuously*/
 			game.playerShoot();
 			break;
 
@@ -184,9 +172,8 @@ namespace Engine
 
 		// Update code goes here
 		//
-		game.Update(DESIRED_FRAME_TIME);
 		
-
+	
 		double endTime = m_timer->GetElapsedTimeInSeconds();
 		double nextTimeFrame = startTime + DESIRED_FRAME_TIME;
 
@@ -196,8 +183,10 @@ namespace Engine
 			endTime = m_timer->GetElapsedTimeInSeconds();
 		}
 
-		//double elapsedTime = endTime - startTime;        
+		double elapsedTime = endTime - startTime;        
 
+		game.Update(elapsedTime);
+		
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 
 		m_nUpdates++;
@@ -210,7 +199,6 @@ namespace Engine
 		glClear(GL_COLOR_BUFFER_BIT);
 		game.Render();
 		SDL_GL_SwapWindow(m_mainWindow);
-		
 	}
 
 	bool App::SDLInit()
@@ -308,11 +296,19 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-		game.player.updateFrame(width/2, height/2);
+		
+		game.player.updateFrame(m_width/2, m_height/2);
+
+		for (int i = 0; i < game.bulletVector.size(); i++)
+		{
+			game.bulletVector[i].updateFrame(m_width / 2, m_height / 2);
+		}
+
 		for (int i = 0; i < game.asteroidVector.size(); i++)
 		{
-			game.asteroidVector[i].updateFrame(width/2, height/2);
+			game.asteroidVector[i].updateFrame(m_width/2, m_height/2);
 		}
+
 		SetupViewport();
 	}
 

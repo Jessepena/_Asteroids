@@ -8,6 +8,8 @@ Entity::Entity()
 	orientation = 0.0f;
 	mass = 1.0f;
 	debuggingOn = false;
+	screenWidth = 568;
+	screenHeight = 320;
 	
 }
 
@@ -141,10 +143,8 @@ float Entity::getRadius()
 
 void Entity::Update(float deltaTime)
 {
-	
 	Warping();
 	addPosition(Vector2(velocity.x * deltaTime, velocity.y * deltaTime));
-
 }
 
 

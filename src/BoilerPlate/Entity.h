@@ -11,8 +11,8 @@ class  Entity
 	private:
 
 		/*MEMBERS*/
-		int screenWidth = 568;
-		int screenHeight = 320;
+		int screenWidth;
+		int screenHeight;
 		Vector2 position;
 		float mass;
 		float orientation;
