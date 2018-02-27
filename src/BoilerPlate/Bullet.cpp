@@ -2,11 +2,10 @@
 
 const int MAX_LIFE = 100;
 
-Bullet::Bullet(Vector2 newPosition, float newOrientation)
+Bullet::Bullet(Vector2 newPosition, float newOrientation) : Entity()
 {
 	setPosition(newPosition);
 	setOrientation(newOrientation);
-	Move();
 	std::vector<Vector2> pointsToPush;
 	pointsToPush.push_back(Vector2(0.0f*(0.10), 30.0f*(0.10)));
 	pointsToPush.push_back(Vector2(15.0f*(0.10), 20.0f*(0.10)));
@@ -25,6 +24,7 @@ Bullet::Bullet(Vector2 newPosition, float newOrientation)
 	setPoints(pointsToPush);
 	setRadius(3);
 	m_life = 0;
+	Move();
 }
 
 Bullet::~Bullet()

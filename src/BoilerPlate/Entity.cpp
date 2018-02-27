@@ -4,101 +4,111 @@ MathUtilities math;
 
 Entity::Entity()
 {
-	position = Vector2();
-	orientation = 0.0f;
-	mass = 1.0f;
-	debuggingOn = false;
-	screenWidth = 568;
-	screenHeight = 320;
+	m_position = Vector2();
+	m_orientation = 0.0f;
+	m_mass = 1.0f;
+	m_debuggingOn = false;
+	m_screenWidth = 568;// ._. <- mira como inicializas buen loco
+	m_screenHeight = 320;
 	
 }
 
 void Entity::addPosition(Vector2 positionToMove)
 {
-	position += positionToMove;
+	m_position += positionToMove;
 }
 
 
 Vector2 Entity::getPosition()
 {
-	return position;
+	return m_position;
 }
 
 void Entity::setPosition(Vector2 newPosition)
 {
-	position = newPosition;
+	m_position = newPosition;
 }
 
 Vector2 Entity::getVelocity()
 {
-	return velocity;
+	return m_velocity;
 }
 
 void Entity::setVelocity(Vector2 newVelocity)
 {
-	velocity = newVelocity;
+	m_velocity = newVelocity;
 }
 
 void Entity::addVelocity(Vector2 newVelocity)
 {
-	velocity += newVelocity;
+	m_velocity += newVelocity;
 }
 
 float Entity::getOrientation()
 {
-	return orientation;
+	return m_orientation;
 }
 
 void Entity::addOrientation(float orientationToAdd)
 {
-	orientation += orientationToAdd;
+	m_orientation += orientationToAdd;
 }
 
 void Entity::setOrientation(float newOrientation)
 {
-	orientation = newOrientation;
+	m_orientation = newOrientation;
 }
 
 void Entity::setPoints(std::vector<Vector2> newPoints)
 {
-	points = newPoints;
+	m_points = newPoints;
 }
 
 bool Entity::getDebuggingOn()
 {
-	return debuggingOn;
+	return m_debuggingOn;
 }
 
 void Entity::setDebuggingOn(bool newDebuggingOn)
 {
-	debuggingOn = newDebuggingOn;
+	m_debuggingOn = newDebuggingOn;
+}
+
+int Entity::getScreenWidth()
+{
+	return m_screenWidth;
+}
+
+int Entity::getScreenHeight()
+{
+	return m_screenHeight;
 }
 
 std::vector<Vector2> Entity::getPoints()
 {
-	return points;
+	return m_points;
 }
 
 void Entity::Warping() {
 
 	// X axis warping
-	if (position.x < -screenWidth)
+	if (m_position.x < -m_screenWidth)
 	{
-		position.x = screenWidth;
+		m_position.x = m_screenWidth;
 	}
-	else if (position.x > screenWidth)
+	else if (m_position.x > m_screenWidth)
 	{
-		position.x = -screenWidth;
+		m_position.x = -m_screenWidth;
 	}
 
 	// Y axis warping
-	if (position.y < -screenHeight)
+	if (m_position.y < -m_screenHeight)
 	{
-		position.y = screenHeight;
+		m_position.y = m_screenHeight;
 	}
-	else if (position.y > screenHeight)
+	else if (m_position.y > m_screenHeight)
 	{
-		position.y = -screenHeight;
+		m_position.y = -m_screenHeight;
 	}
 }
 
@@ -123,35 +133,35 @@ void Entity::drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius)
 
 float Entity::getMass()
 {
-	return mass;
+	return m_mass;
 }
 
 void Entity::setMass(float newMass)
 {
-	mass = newMass;
+	m_mass = newMass;
 }
 
 void Entity::setRadius(float newRadius)
 {
-	radius = newRadius;
+	m_radius = newRadius;
 }
 
 float Entity::getRadius()
 {
-	return radius;
+	return m_radius;
 }
 
 void Entity::Update(float deltaTime)
 {
 	Warping();
-	addPosition(Vector2(velocity.x * deltaTime, velocity.y * deltaTime));
+	addPosition(Vector2(m_velocity.x * deltaTime, m_velocity.y * deltaTime));
 }
 
 
 void Entity::updateFrame(int newScreenWidth, int newScreenHeigth)
 {
-	screenWidth = newScreenWidth;
-	screenHeight = newScreenHeigth;
+	m_screenWidth = newScreenWidth;
+	m_screenHeight = newScreenHeigth;
 }
 
 Entity::~Entity()

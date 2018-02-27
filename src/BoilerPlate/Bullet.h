@@ -6,11 +6,11 @@
 
 class Bullet : public Entity 
 {
-	
-	public:
+	private:
 		/*MEMBERS*/
 		int m_life;
-
+		//donde es que ta width y height
+	public:
 		/*FUNCTIONS*/
 		void Update(float);
 		void Render();

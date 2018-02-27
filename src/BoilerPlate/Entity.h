@@ -11,24 +11,21 @@ class  Entity
 	private:
 
 		/*MEMBERS*/
-		int screenWidth;
-		int screenHeight;
-		Vector2 position;
-		float mass;
-		float orientation;
-		Vector2 velocity;
-		std::vector<Vector2> points;
-		bool debuggingOn;
-		float radius;
+		int m_screenWidth;
+		int m_screenHeight;
+		Vector2 m_position;
+		float m_mass;
+		float m_orientation;
+		Vector2 m_velocity;
+		std::vector<Vector2> m_points;
+		bool m_debuggingOn;
+		float m_radius;
 
 	public:
 
 		/*CTOR*/
 		Entity();
 		~Entity();
-
-		/*PUBLIC MEMBERS*/
-	
 
 		/*FUNCTIONS*/
 		virtual void Update(float); 
@@ -53,8 +50,8 @@ class  Entity
 		float getRadius();
 		bool getDebuggingOn();
 		void setDebuggingOn(bool);
-
-	
+		int getScreenWidth();
+		int getScreenHeight();
 
 };
 

@@ -3,11 +3,10 @@
 
 Game::Game()
 {
-	
-	framerates = std::vector <float>(300);
-	asteroidVector.push_back(Asteroid(Asteroid::AsteroidSize::Size::BIG));
-	time = 0;
-	framerateRenderCount = 0;
+
+	m_framerates = std::vector <float>(300);
+	m_asteroidVector.push_back(Asteroid(Asteroid::AsteroidSize::Size::BIG));
+	m_time = 0;
 }
 Game::~Game()
 {
@@ -16,69 +15,76 @@ Game::~Game()
 
 void Game::playerShoot()
 {
-	if(bulletVector.size() <= 5)
-		bulletVector.push_back(player.Shoot());
+	if (m_bulletVector.size() <= 5) {
+		Bullet myBullet = m_player.Shoot();
+		myBullet.updateFrame(m_player.getScreenWidth(), m_player.getScreenHeight());
+		m_bulletVector.push_back(myBullet);
+		SDL_Log("Bullet Fired!");
+	}
+	else
+		SDL_Log("Reloading");
 }
 
 void Game::setDebug()
 {
-	if (debuggingOn)
+	if (m_debuggingOn)
 	{
-		debuggingOn = false;
-		player.setDebuggingOn(false);
-		for (int i = 0; i < asteroidVector.size(); i++)
+		m_debuggingOn = false;
+		m_player.setDebuggingOn(false);
+		for (int i = 0; i < m_asteroidVector.size(); i++)
 		{
-			asteroidVector[i].setDebuggingOn(false);
+			m_asteroidVector[i].setDebuggingOn(false);
 		}
-		for (int i = 0; i < bulletVector.size(); i++)
+		for (int i = 0; i < m_bulletVector.size(); i++)
 		{
-			bulletVector[i].setDebuggingOn(false);
+			m_bulletVector[i].setDebuggingOn(false);
 		}
-		
+		SDL_Log("Debugger mode OFF");
 	}
 	else
 	{
-		debuggingOn = true;
-		player.setDebuggingOn(true);
-		for (int i = 0; i < asteroidVector.size(); i++)
+		m_debuggingOn = true;
+		m_player.setDebuggingOn(true);
+		for (int i = 0; i < m_asteroidVector.size(); i++)
 		{
-			asteroidVector[i].setDebuggingOn(true);
+			m_asteroidVector[i].setDebuggingOn(true);
 		}
-		for (int i = 0; i < bulletVector.size(); i++)
+		for (int i = 0; i < m_bulletVector.size(); i++)
 		{
-			bulletVector[i].setDebuggingOn(true);
+			m_bulletVector[i].setDebuggingOn(true);
 		}
+		SDL_Log("Debugger mode ON");
 	}
 }
 
 void Game::updateBulletCollision()
 {
 	bool bulletDestroyed = false;
-	for (int i = 0; i < bulletVector.size(); i++)
+	for (int i = 0; i < m_bulletVector.size(); i++)
 	{
-		for (int j = 0; j < asteroidVector.size(); j++)
+		for (int j = 0; j < m_asteroidVector.size(); j++)
 		{
-			float distanceBulletAsteroid = mathUtilities.calculateDistance(bulletVector[i].getPosition().x, bulletVector[i].getPosition().y, asteroidVector[j].getPosition().x, asteroidVector[j].getPosition().y);
-			float radiusBulletAsteroid = bulletVector[i].getRadius() + asteroidVector[j].getRadius();
+			float distanceBulletAsteroid = mathUtilities.calculateDistance(m_bulletVector[i].getPosition().x, m_bulletVector[i].getPosition().y, m_asteroidVector[j].getPosition().x, m_asteroidVector[j].getPosition().y);
+			float radiusBulletAsteroid = m_bulletVector[i].getRadius() + m_asteroidVector[j].getRadius();
 
-			if (isColliding(distanceBulletAsteroid, radiusBulletAsteroid) && !debuggingOn)
+			if (isColliding(distanceBulletAsteroid, radiusBulletAsteroid) && !m_debuggingOn)
 			{
-				bulletVector.erase(bulletVector.begin() + i);
+				m_bulletVector.erase(m_bulletVector.begin() + i);
 				bulletDestroyed = true;
-				if (asteroidVector[j].GetSize() == Asteroid::AsteroidSize::Size::BIG)
+				if (m_asteroidVector[j].GetSize() == Asteroid::AsteroidSize::Size::BIG)
 				{
-					asteroidVector.push_back(Asteroid(asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
-					asteroidVector.push_back(Asteroid(asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
-					asteroidVector.erase(asteroidVector.begin() + j);
+					m_asteroidVector.push_back(Asteroid(m_asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
+					m_asteroidVector.push_back(Asteroid(m_asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
+					m_asteroidVector.erase(m_asteroidVector.begin() + j);
 				}
-				else if (asteroidVector[j].GetSize() == Asteroid::AsteroidSize::Size::MEDIUM)
+				else if (m_asteroidVector[j].GetSize() == Asteroid::AsteroidSize::Size::MEDIUM)
 				{
-					asteroidVector.push_back(Asteroid(asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
-					asteroidVector.push_back(Asteroid(asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
-					asteroidVector.erase(asteroidVector.begin() + j);
+					m_asteroidVector.push_back(Asteroid(m_asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
+					m_asteroidVector.push_back(Asteroid(m_asteroidVector[j].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
+					m_asteroidVector.erase(m_asteroidVector.begin() + j);
 				}
 				else
-					asteroidVector.erase(asteroidVector.begin() + j);
+					m_asteroidVector.erase(m_asteroidVector.begin() + j);
 
 				break;	
 			}
@@ -91,27 +97,27 @@ void Game::updateBulletCollision()
 
 void Game::updatePlayerCollision()
 {
-	for (int i = 0; i < asteroidVector.size(); i++)
+	for (int i = 0; i < m_asteroidVector.size(); i++)
 	{
-		float distancePlayerAsteroid = mathUtilities.calculateDistance(player.getPosition().x, player.getPosition().y, asteroidVector[i].getPosition().x, asteroidVector[i].getPosition().y);
-		float radiusPlayerAsteroid = player.getRadius() + asteroidVector[i].getRadius();
-		if (isColliding(distancePlayerAsteroid, radiusPlayerAsteroid) && !debuggingOn)
+		float distancePlayerAsteroid = mathUtilities.calculateDistance(m_player.getPosition().x, m_player.getPosition().y, m_asteroidVector[i].getPosition().x, m_asteroidVector[i].getPosition().y);
+		float radiusPlayerAsteroid = m_player.getRadius() + m_asteroidVector[i].getRadius();
+		if (isColliding(distancePlayerAsteroid, radiusPlayerAsteroid) && !m_debuggingOn)
 		{
-			player.setPosition(Vector2());
-			if (asteroidVector[i].GetSize() == Asteroid::AsteroidSize::Size::BIG)
+			m_player.setPosition(Vector2());
+			if (m_asteroidVector[i].GetSize() == Asteroid::AsteroidSize::Size::BIG)
 			{
-				asteroidVector.push_back(Asteroid(asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
-				asteroidVector.push_back(Asteroid(asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
-				asteroidVector.erase(asteroidVector.begin() + i);
+				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
+				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
+				m_asteroidVector.erase(m_asteroidVector.begin() + i);
 			}
-			else if (asteroidVector[i].GetSize() == Asteroid::AsteroidSize::Size::MEDIUM)
+			else if (m_asteroidVector[i].GetSize() == Asteroid::AsteroidSize::Size::MEDIUM)
 			{
-				asteroidVector.push_back(Asteroid(asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
-				asteroidVector.push_back(Asteroid(asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
-				asteroidVector.erase(asteroidVector.begin() + i);
+				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
+				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
+				m_asteroidVector.erase(m_asteroidVector.begin() + i);
 			}
 			else
-				asteroidVector.erase(asteroidVector.begin() + i);
+				m_asteroidVector.erase(m_asteroidVector.begin() + i);
 		}
 	}
 	
@@ -119,169 +125,274 @@ void Game::updatePlayerCollision()
 
 void Game::updateAsteroidsDebugging()
 {
-	if (player.getDebuggingOn())
+	if (m_player.getDebuggingOn())
 	{
-		for (int i = 0; i < asteroidVector.size(); i++)
+		for (int i = 0; i < m_asteroidVector.size(); i++)
 		{
-			asteroidVector[i].setDebuggingOn(true);
+			m_asteroidVector[i].setDebuggingOn(true);
 		}
 	}
 	else
 	{
-		for (int i = 0; i < asteroidVector.size(); i++)
+		for (int i = 0; i < m_asteroidVector.size(); i++)
 		{
-			asteroidVector[i].setDebuggingOn(false);
+			m_asteroidVector[i].setDebuggingOn(false);
 		}
 	}
 }
-void Game::drawFramesGraphic()
+void Game::updateFrameratesGraphic(float deltaTime)
 {
-
+	if (m_time >= 250)
+		m_time = 0;
+	m_framerates[m_time] = deltaTime * 80000;
+	m_time++;
 }
-void Game::updateBullets(float deltaTime)
+void Game::updateInputManagerMovement()
 {
-	for (int i = 0; i<bulletVector.size(); i++)
+	if (m_inputManager.get_w_key() || m_inputManager.get_up_key())
 	{
-		if (!bulletVector[i].shouldRemove())
-			bulletVector[i].Update(deltaTime);
-		else
-			bulletVector.erase(bulletVector.begin() + i);
-	}
-}
-void Game::Update(float deltaTime)
-{
-	
-	if (time >= 250) 
-		time = 0;
-	/*FRAMES*/
-	framerates[time] = deltaTime*80000;
-	time++;
-	
-	
-	/*INPUT MANAGER MOVEMENT*/
-	if (inputManager.get_w_key() || inputManager.get_up_key())
-	{
-		player.MoveForward();
+		m_player.MoveForward();
 	}
 	else
-		player.setThrusterOn(false);
-	if (inputManager.get_a_key() || inputManager.get_left_key())
 	{
-		player.RotateLeft(5);
-	}
-	if (inputManager.get_d_key() || inputManager.get_right_key())
-	{
-		player.RotateRight(5);
+		m_player.setThrusterOn(false);
 	}
 
-	/*COLLISION*/
-	updateAsteroidsDebugging();
-	updateBulletCollision();
-	updatePlayerCollision();
-
-
-	/*ENTITIES UPDATE*/
-	player.Update(deltaTime);
-
-	for (int i = 0; i<bulletVector.size(); i++)
+	if (m_inputManager.get_a_key() || m_inputManager.get_left_key())
 	{
-		if (!bulletVector[i].shouldRemove())
-			bulletVector[i].Update(deltaTime);
-		else
-			bulletVector.erase(bulletVector.begin() + i);
+		m_player.RotateLeft(5);
 	}
-
-	for (int i=0; i<asteroidVector.size(); i++)
+	if (m_inputManager.get_d_key() || m_inputManager.get_right_key())
 	{
-		asteroidVector[i].Update(deltaTime);
+		m_player.RotateRight(5);
 	}
-
 }
-
-bool Game::isColliding(float distance, float radius)
+void Game::drawFrameratesGraphic()
 {
-	return(distance < radius);
-}
-void Game::Render()
-{
-	glLoadIdentity();
-
-	if (debuggingOn)
+	if (m_debuggingOn)
 	{
 		glBegin(GL_LINE_STRIP);
 		glColor3f(1.0f, 1.0f, 1.0f);
 
 		for (int i = 0; i < 250; i++)
 		{
-			glVertex2f(i + 280, framerates[i] - 1600);
+			glVertex2f(i + 280, m_framerates[i] - 1600);
 		}
 
 		glEnd();
 	}
-
-	player.Render();
-
-	for (int i = 0; i<asteroidVector.size(); i++)
+}
+void Game::updateBullets(float deltaTime)
+{
+	for (int i = 0; i<m_bulletVector.size(); i++)
 	{
-		asteroidVector[i].Render();
+		if (!m_bulletVector[i].shouldRemove())
+			m_bulletVector[i].Update(deltaTime);
+		else
+			m_bulletVector.erase(m_bulletVector.begin() + i);
 	}
+}
+void Game::Update(float deltaTime)
+{
+	/*FRAMERATE UPDATE*/
+	updateFrameratesGraphic(deltaTime);
 	
-	for (int i = 0; i<bulletVector.size(); i++)
+	/*INPUT MANAGER MOVEMENT*/
+	updateInputManagerMovement();
+
+	/*COLLISION*/
+	updateAsteroidsDebugging();
+	updateBulletCollision();
+	updatePlayerCollision();
+
+	/*ENTITIES UPDATE*/
+	updateEntities(deltaTime);
+
+}
+
+void Game::updateEntities(float deltaTime)
+{
+	m_player.Update(deltaTime);
+
+	for (int i = 0; i<m_bulletVector.size(); i++)
 	{
-		bulletVector[i].Render();
+		if (!m_bulletVector[i].shouldRemove())
+			m_bulletVector[i].Update(deltaTime);
+		else
+			m_bulletVector.erase(m_bulletVector.begin() + i);
 	}
 
-	for (int i = 0; i < asteroidVector.size(); i++)
+	for (int i = 0; i<m_asteroidVector.size(); i++)
 	{
-		float distance = mathUtilities.calculateDistance(player.getPosition().x, player.getPosition().y, asteroidVector[i].getPosition().x, asteroidVector[i].getPosition().y);
+		m_asteroidVector[i].Update(deltaTime);
+	}
+}
+
+bool Game::isColliding(float distance, float radius)
+{
+	return(distance < radius);
+}
+void Game::renderBullets()
+{
+	for (int i = 0; i<m_bulletVector.size(); i++)
+	{
+		m_bulletVector[i].Render();
+	}
+}
+void Game::renderPlayerAsteroidLines()
+{
+	for (int i = 0; i < m_asteroidVector.size(); i++)
+	{
+		float distance = mathUtilities.calculateDistance(m_player.getPosition().x, m_player.getPosition().y, m_asteroidVector[i].getPosition().x, m_asteroidVector[i].getPosition().y);
 		glLoadIdentity();
-		if (debuggingOn && distance < 200)
+		if (m_debuggingOn && distance < 200)
 		{
-			if(isColliding(distance,player.getRadius() + asteroidVector[i].getRadius()))
+			if (isColliding(distance, m_player.getRadius() + m_asteroidVector[i].getRadius()))
 				glColor3f(1.0f, 0.0f, 0.0f);
 			else
 				glColor3f(0.0f, 1.0f, 0.0f);
 
 			glBegin(GL_LINE_LOOP);
-				glVertex2f(player.getPosition().x, player.getPosition().y);
-				glVertex2f(asteroidVector[i].getPosition().x, asteroidVector[i].getPosition().y);
+			glVertex2f(m_player.getPosition().x, m_player.getPosition().y);
+			glVertex2f(m_asteroidVector[i].getPosition().x, m_asteroidVector[i].getPosition().y);
 			glEnd();
 		}
 	}
-
-	for (int i = 0; i < bulletVector.size(); i++)
+}
+void Game::renderBulletAsteroidLines()
+{
+	for (int i = 0; i < m_bulletVector.size(); i++)
 	{
-		for (int j = 0; j < asteroidVector.size(); j++)
+		for (int j = 0; j < m_asteroidVector.size(); j++)
 		{
-			float distance = mathUtilities.calculateDistance(bulletVector[i].getPosition().x, bulletVector[i].getPosition().y, asteroidVector[j].getPosition().x, asteroidVector[j].getPosition().y);
+			float distance = mathUtilities.calculateDistance(m_bulletVector[i].getPosition().x, m_bulletVector[i].getPosition().y, m_asteroidVector[j].getPosition().x, m_asteroidVector[j].getPosition().y);
 			glLoadIdentity();
-			if (debuggingOn && distance < 200)
+			if (m_debuggingOn && distance < 200)
 			{
-				if (isColliding(distance, bulletVector[i].getRadius() + asteroidVector[j].getRadius()))
+				if (isColliding(distance, m_bulletVector[i].getRadius() + m_asteroidVector[j].getRadius()))
 					glColor3f(1.0f, 0.0f, 0.0f);
 				else
 					glColor3f(0.0f, 0.0f, 1.0f);
 
 				glBegin(GL_LINE_LOOP);
-				glVertex2f(bulletVector[i].getPosition().x, bulletVector[i].getPosition().y);
-				glVertex2f(asteroidVector[j].getPosition().x, asteroidVector[j].getPosition().y);
+				glVertex2f(m_bulletVector[i].getPosition().x, m_bulletVector[i].getPosition().y);
+				glVertex2f(m_asteroidVector[j].getPosition().x, m_asteroidVector[j].getPosition().y);
 				glEnd();
 			}
 		}
 	}
 }
+void Game::Render()
+{
+	glLoadIdentity();
+
+	drawFrameratesGraphic();
+
+	m_player.Render();
+
+	renderAsteroids();
+
+	renderBullets();
+	
+	renderPlayerAsteroidLines();
+
+	renderBulletAsteroidLines();
+}
+
+void Game::renderAsteroids()
+{
+	for (int i = 0; i<m_asteroidVector.size(); i++)
+		m_asteroidVector[i].Render();
+}
 
 void Game::addAsteroid()
 {
-	if (debuggingOn)
-		asteroidVector.push_back(Asteroid());
+	if (m_debuggingOn)
+	{
+		m_asteroidVector.push_back(Asteroid());
+		SDL_Log("Added Asteroid");
+	}
+	else
+		SDL_Log("Debugger mode is OFF");
 }
 
 void Game::removeAsteroid()
 {
-	if (debuggingOn)
+	if (m_debuggingOn)
 	{
-		if (asteroidVector.size() != 0)
-			asteroidVector.pop_back();
+		if (m_asteroidVector.size() != 0)
+		{
+			m_asteroidVector.pop_back();
+			SDL_Log("Removed Asteroid");
+		}
 	}
+	else
+		SDL_Log("Debugger mode is OFF");
+}
+
+Player Game::getPlayer()
+{
+	return m_player;
+}
+
+InputManager Game::getInputManager()
+{
+	return m_inputManager;
+}
+
+void Game::updateFrames(float width, float height)
+{
+	m_player.updateFrame(width / 2, height / 2);
+
+	for (int i = 0; i < m_bulletVector.size(); i++)
+	{
+		m_bulletVector[i].updateFrame(width / 2, height / 2);
+	}
+	
+	for (int i = 0; i < m_asteroidVector.size(); i++)
+	{
+		m_asteroidVector[i].updateFrame(width / 2, height / 2);
+	}
+}
+
+void Game::movingUp()
+{
+	m_inputManager.set_up_key(true);
+	m_inputManager.set_w_key(true);
+	SDL_Log("Moving Up");
+}
+
+void Game::movingLeft()
+{
+	m_inputManager.set_left_key(true);
+	m_inputManager.set_a_key(true);
+	SDL_Log("Moving Left");
+}
+
+void Game::movingRight()
+{
+	m_inputManager.set_right_key(true);
+	m_inputManager.set_d_key(true);
+	SDL_Log("Moving Right");
+}
+
+void Game::notMovingUp()
+{
+	m_inputManager.set_up_key(false);
+	m_inputManager.set_w_key(false);
+	SDL_Log("Stopped Moving Up");
+}
+
+void Game::notMovingLeft()
+{
+	m_inputManager.set_left_key(false);
+	m_inputManager.set_a_key(false);
+	SDL_Log("Stopped Moving Left");
+}
+
+void Game::notMovingRight()
+{
+	m_inputManager.set_right_key(false);
+	m_inputManager.set_d_key(false);
+	SDL_Log("Stopped Moving Right");
 }

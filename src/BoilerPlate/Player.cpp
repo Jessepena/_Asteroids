@@ -39,7 +39,6 @@ void Player::Update(float deltaTime)
 
 void Player::Render()
 {
-	ColorPalette colors;
 	Vector2 position = getPosition();
 	std::vector<Vector2> points = getPoints();
 	float shipOrientation = getOrientation();

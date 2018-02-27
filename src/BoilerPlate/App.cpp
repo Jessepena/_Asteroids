@@ -92,20 +92,17 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			game.inputManager.set_up_key(true);
-			game.inputManager.set_w_key(true);
+			game.movingUp();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
-			game.inputManager.set_left_key(true);
-			game.inputManager.set_a_key(true);
+			game.movingLeft();
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
-			game.inputManager.set_right_key(true);
-			game.inputManager.set_d_key(true);
+			game.movingRight();
 			break;
 
 		case SDL_SCANCODE_N:
@@ -120,10 +117,13 @@ namespace Engine
 		case SDL_SCANCODE_Y:
 			game.setDebug();
 			break;
-				
 
+		case SDL_SCANCODE_SPACE:
+			SDL_Log("Loading bullet");
+			break;
+				
 		default:
-			SDL_Log("%S was pressed.", keyBoardEvent.keysym.scancode);
+			SDL_Log("A not defined key was pressed");
 			break;
 		}
 	}
@@ -138,20 +138,17 @@ namespace Engine
 
 		case SDL_SCANCODE_UP:
 		case SDL_SCANCODE_W:
-			game.inputManager.set_w_key(false);
-			game.inputManager.set_up_key(false);
+			game.notMovingUp();
 			break;
 
 		case SDL_SCANCODE_LEFT:
 		case SDL_SCANCODE_A:
-			game.inputManager.set_left_key(false);
-			game.inputManager.set_a_key(false);
+			game.notMovingLeft();
 			break;
 
 		case SDL_SCANCODE_RIGHT:
 		case SDL_SCANCODE_D:
-			game.inputManager.set_right_key(false);
-			game.inputManager.set_d_key(false);
+			game.notMovingRight();
 			break;
 
 
@@ -296,19 +293,7 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-		
-		game.player.updateFrame(m_width/2, m_height/2);
-
-		for (int i = 0; i < game.bulletVector.size(); i++)
-		{
-			game.bulletVector[i].updateFrame(m_width / 2, m_height / 2);
-		}
-
-		for (int i = 0; i < game.asteroidVector.size(); i++)
-		{
-			game.asteroidVector[i].updateFrame(m_width/2, m_height/2);
-		}
-
+		game.updateFrames(width, height);
 		SetupViewport();
 	}
 

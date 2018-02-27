@@ -14,38 +14,56 @@
 #include "InputManager.hpp"
 class Game
 {
-public:
+	private:
+		/*MEMBERS*/
+		bool m_debuggingOn;
+		Player m_player;
+		MathUtilities mathUtilities;
+		std::vector<Asteroid> m_asteroidVector;
+		std::vector<Bullet> m_bulletVector;
+		InputManager m_inputManager;
+		std::vector<float> m_framerates;
+		int m_time;
 
-	/*MEMBERS*/
-	bool debuggingOn;
-	Player player;
-	Asteroid asteroid;
-	MathUtilities mathUtilities;
-	std::vector<Asteroid> asteroidVector;
-	std::vector<Bullet> bulletVector;
-	InputManager inputManager;
-	std::vector<float> framerates;
-	int framerateRenderCount;
-	int time;
+	public:
+
+		/*FUNCTIONS*/
+		void Update(float);
+		void updateEntities(float);
+		void updateBulletCollision();
+		void updatePlayerCollision();
+		void updateBullets(float deltaTime);
+		void updateAsteroidsDebugging();
+		void updateFrameratesGraphic(float);
+		void updateInputManagerMovement();
+
+		void Render();
+		void renderAsteroids();
+		void renderBullets();
+		void renderPlayerAsteroidLines();
+		void renderBulletAsteroidLines();
+		void drawFrameratesGraphic();
+
+		void setDebug();
+		void playerShoot();
+		bool isColliding(float, float);
+		
+		
+		void addAsteroid();
+		void removeAsteroid();
+		Player getPlayer();
+		InputManager getInputManager();
+		void updateFrames(float, float);
+		void movingUp();
+		void movingLeft();
+		void movingRight();
+		void notMovingUp();
+		void notMovingLeft();
+		void notMovingRight();
+
 	
-
-	/*FUNCTIONS*/
-	void updateBulletCollision();
-	void updatePlayerCollision();
-	void updateBullets(float deltaTime);
-	void updateAsteroidsDebugging();
-	void drawFramesGraphic();
-	void setDebug();
-	void playerShoot();
-	bool isColliding(float, float);
-	void Update(float);
-	void Render();
-	void addAsteroid();
-	void removeAsteroid();
-
-	
-	Game();
-	~Game();
+		Game();
+		~Game();
 };
 
 #endif // !_ASTEROID_H_

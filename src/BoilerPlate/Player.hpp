@@ -19,9 +19,6 @@ public:
 	/*CTOR*/
 	Player();
 
-	/*PUBLIC MEMBERS*/
-	
-
 	/*FUNCTIONS*/
 	void Update(float) override;
 	void Render() override;
