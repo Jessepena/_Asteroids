@@ -1,7 +1,7 @@
 #include "Asteroid.hpp"
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 const size_t NUM_POINTS = 16;
 const float MIN_SIZE = 25.0f;
@@ -62,20 +62,20 @@ Asteroid::Asteroid(AsteroidSize::Size newSize) : Entity()
 	}
 	else if (size == 2)
 	{
-		pointsToPush.push_back(Vector2(0.0f, 30.0f));
-		pointsToPush.push_back(Vector2(15.0f, 20.0f));
-		pointsToPush.push_back(Vector2(25.0f, 10.0f));
-		pointsToPush.push_back(Vector2(20.0f, 5.0f));
-		pointsToPush.push_back(Vector2(25.0f, 0.0f));
-		pointsToPush.push_back(Vector2(25.0f, -10.0f));
-		pointsToPush.push_back(Vector2(15.0f, -20.0f));
-		pointsToPush.push_back(Vector2(0.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-15.0f, -20.0f));
-		pointsToPush.push_back(Vector2(-25.0f, -10.0f));
-		pointsToPush.push_back(Vector2(-20.0f, -5.0f));
-		pointsToPush.push_back(Vector2(-25.0f, 0.0f));
-		pointsToPush.push_back(Vector2(-25.0f, 10.0f));
-		pointsToPush.push_back(Vector2(-15.0f, 20.0f));
+		pointsToPush.push_back(Vector2(0.0f*(1.35), 30.0f*(1.35)));
+		pointsToPush.push_back(Vector2(15.0f*(1.35), 20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), 10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(20.0f*(1.35), 5.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), 0.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), -10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(15.0f*(1.35), -20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(0.0f*(1.35), -25.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-15.0f*(1.35), -20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), -10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-20.0f*(1.35), -5.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), 0.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), 10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-15.0f*(1.35), 20.0f*(1.35)));
 		setPoints(pointsToPush);
 		setMass(2);
 		angle = 80; 
@@ -103,7 +103,7 @@ Asteroid::Asteroid(AsteroidSize::Size newSize) : Entity()
 		angle = 120;
 		setRadius(20);
 	}
-	
+	setPosition(Vector2(mathUtilities.randInRange(0, 1000), mathUtilities.randInRange(0, 1000)));
 	setOrientation(mathUtilities.randInRange(1, 360));
 	move();
 }
@@ -136,20 +136,20 @@ Asteroid::Asteroid(Vector2 newPosition, AsteroidSize::Size newSize) : Entity()
 	}
 	else if (size == 2)
 	{
-		pointsToPush.push_back(Vector2(0.0f, 30.0f));
-		pointsToPush.push_back(Vector2(15.0f, 20.0f));
-		pointsToPush.push_back(Vector2(25.0f, 10.0f));
-		pointsToPush.push_back(Vector2(20.0f, 5.0f));
-		pointsToPush.push_back(Vector2(25.0f, 0.0f));
-		pointsToPush.push_back(Vector2(25.0f, -10.0f));
-		pointsToPush.push_back(Vector2(15.0f, -20.0f));
-		pointsToPush.push_back(Vector2(0.0f, -25.0f));
-		pointsToPush.push_back(Vector2(-15.0f, -20.0f));
-		pointsToPush.push_back(Vector2(-25.0f, -10.0f));
-		pointsToPush.push_back(Vector2(-20.0f, -5.0f));
-		pointsToPush.push_back(Vector2(-25.0f, 0.0f));
-		pointsToPush.push_back(Vector2(-25.0f, 10.0f));
-		pointsToPush.push_back(Vector2(-15.0f, 20.0f));
+		pointsToPush.push_back(Vector2(0.0f*(1.35), 30.0f*(1.35)));
+		pointsToPush.push_back(Vector2(15.0f*(1.35), 20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), 10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(20.0f*(1.35), 5.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), 0.0f*(1.35)));
+		pointsToPush.push_back(Vector2(25.0f*(1.35), -10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(15.0f*(1.35), -20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(0.0f*(1.35), -25.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-15.0f*(1.35), -20.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), -10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-20.0f*(1.35), -5.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), 0.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-25.0f*(1.35), 10.0f*(1.35)));
+		pointsToPush.push_back(Vector2(-15.0f*(1.35), 20.0f*(1.35)));
 		setPoints(pointsToPush);
 		setMass(2);
 		angle = 80;
@@ -176,12 +176,11 @@ Asteroid::Asteroid(Vector2 newPosition, AsteroidSize::Size newSize) : Entity()
 		angle = 120;
 		setRadius(20);
 	}
-	
+
 	setOrientation(mathUtilities.randInRange(1, 360));
 	move();
 
 }
-
 Asteroid::AsteroidSize::Size Asteroid::GetSize()
 {
 	return size;
@@ -189,13 +188,17 @@ Asteroid::AsteroidSize::Size Asteroid::GetSize()
 
 void Asteroid::Update(float deltaTime)
 {
+	
 	angle += mathUtilities.randInRange(120, 150) * deltaTime;
+	
 	Entity::Update(deltaTime);
+
 }
 
 void Asteroid::Render()
 {
 	Vector2 position = getPosition();
+
 	std::vector<Vector2> points = getPoints();
 
 	glLoadIdentity();
@@ -204,6 +207,7 @@ void Asteroid::Render()
 
 	glColor3f(1.0f, 1.0f, 1.0f);
 
+	// e que points size siempre va a ser lo mismo
 	glBegin(GL_LINE_LOOP);
 	for (Vector2 i : points)
 	{

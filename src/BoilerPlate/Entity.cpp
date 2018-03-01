@@ -4,14 +4,14 @@ MathUtilities math;
 
 Entity::Entity()
 {
-	m_position = Vector2();
+	m_position = Vector2();	
 	m_orientation = 0.0f;
 	m_mass = 1.0f;
 	m_debuggingOn = false;
-	m_screenWidth = 568;// ._. <- mira como inicializas buen loco
+	m_screenWidth = 568;
 	m_screenHeight = 320;
-	
 }
+
 
 void Entity::addPosition(Vector2 positionToMove)
 {

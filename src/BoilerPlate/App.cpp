@@ -2,20 +2,22 @@
 #include <iostream>
 #include <algorithm>
 #include "Game.hpp"
+#include "InputManager.hpp"
 #include <vector>
 
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 namespace Engine
 {
-	
+
 	const float DESIRED_FRAME_RATE = 60.0f;
 	const float DESIRED_FRAME_TIME = 1.0f / DESIRED_FRAME_RATE;
+	
 	Game game;
-	
-	
 
 	App::App(const std::string& title, const int width, const int height)
 		: m_title(title)
@@ -63,7 +65,7 @@ namespace Engine
 
 	bool App::Init()
 	{
-	
+
 		// Init the external dependencies
 		//
 		bool success = SDLInit() && GlewInit();
@@ -72,6 +74,25 @@ namespace Engine
 			m_state = GameState::INIT_FAILED;
 			return false;
 		}
+
+		if (TTF_Init() == -1) {
+			SDL_Log("TTF_Init: %s\n", TTF_GetError());
+			return false;
+		}
+
+		SDL_version compile_version;
+		const SDL_version *link_version = TTF_Linked_Version();
+		SDL_TTF_VERSION(&compile_version);
+
+		SDL_Log("compiled with SDL_ttf version: %d.%d.%d\n",
+			compile_version.major,
+			compile_version.minor,
+			compile_version.patch);
+
+		SDL_Log("running with SDL_ttf version: %d.%d.%d\n",
+			link_version->major,
+			link_version->minor,
+			link_version->patch);
 
 		// Setup the viewport
 		//
@@ -85,47 +106,8 @@ namespace Engine
 	}
 
 	void App::OnKeyDown(SDL_KeyboardEvent keyBoardEvent)
-	{	
-		
-		switch (keyBoardEvent.keysym.scancode)
-		{
-
-		case SDL_SCANCODE_UP:
-		case SDL_SCANCODE_W:
-			game.movingUp();
-			break;
-
-		case SDL_SCANCODE_LEFT:
-		case SDL_SCANCODE_A:
-			game.movingLeft();
-			break;
-
-		case SDL_SCANCODE_RIGHT:
-		case SDL_SCANCODE_D:
-			game.movingRight();
-			break;
-
-		case SDL_SCANCODE_N:
-			game.addAsteroid();
-			break;
-
-		case SDL_SCANCODE_M:
-			game.removeAsteroid();
-			
-			break;
-
-		case SDL_SCANCODE_Y:
-			game.setDebug();
-			break;
-
-		case SDL_SCANCODE_SPACE:
-			SDL_Log("Loading bullet");
-			break;
-				
-		default:
-			SDL_Log("A not defined key was pressed");
-			break;
-		}
+	{
+			InputManager::SetKeyDown(keyBoardEvent.keysym.sym);
 	}
 
 	void App::OnKeyUp(SDL_KeyboardEvent keyBoardEvent)
@@ -135,42 +117,19 @@ namespace Engine
 		case SDL_SCANCODE_ESCAPE:
 			OnExit();
 			break;
-
-		case SDL_SCANCODE_UP:
-		case SDL_SCANCODE_W:
-			game.notMovingUp();
-			break;
-
-		case SDL_SCANCODE_LEFT:
-		case SDL_SCANCODE_A:
-			game.notMovingLeft();
-			break;
-
-		case SDL_SCANCODE_RIGHT:
-		case SDL_SCANCODE_D:
-			game.notMovingRight();
-			break;
-
-
-		case SDL_SCANCODE_SPACE:
-			/*Shoot is called on OnKeyUp so the user can't keep space pressed to shoot continuously*/
-			game.playerShoot();
-			break;
-
-		default:
-			//DO NOTHING
+		default:	
+			InputManager::SetKeyUp(keyBoardEvent.keysym.sym);
 			break;
 		}
 	}
 
 	void App::Update()
 	{
-		double startTime = m_timer->GetElapsedTimeInSeconds();
+		double startTime = m_lastFrameTime;
 
 		// Update code goes here
 		//
-		
-	
+
 		double endTime = m_timer->GetElapsedTimeInSeconds();
 		double nextTimeFrame = startTime + DESIRED_FRAME_TIME;
 
@@ -180,14 +139,20 @@ namespace Engine
 			endTime = m_timer->GetElapsedTimeInSeconds();
 		}
 
-		double elapsedTime = endTime - startTime;        
+		double elapsedTime = endTime - startTime;
 
 		game.Update(elapsedTime);
-		
+
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 
 		m_nUpdates++;
-		
+
+		if (game.resetGame())
+		{
+			game.clearGame();
+			game.loadGame();
+		}
+		InputManager::Update();
 	}
 
 	void App::Render()
@@ -200,6 +165,8 @@ namespace Engine
 
 	bool App::SDLInit()
 	{
+
+		game.updateFrames(m_width, m_height);
 		// Initialize SDL's Video subsystem
 		//
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -211,9 +178,9 @@ namespace Engine
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-		Uint32 flags =  SDL_WINDOW_OPENGL     | 
-						SDL_WINDOW_SHOWN      | 
-						SDL_WINDOW_RESIZABLE;
+		Uint32 flags = SDL_WINDOW_OPENGL |
+			SDL_WINDOW_SHOWN |
+			SDL_WINDOW_RESIZABLE;
 
 		m_mainWindow = SDL_CreateWindow(
 			m_title.c_str(),

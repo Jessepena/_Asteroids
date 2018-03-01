@@ -1,14 +1,19 @@
 #include "Player.hpp"
 // OpenGL includes
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 const float maxVelocity = 350.0f;
 const float frictionFactor = 0.98f;
 
 Player::Player() : Entity()
 {
-	thrusterOn = false;
+	m_thrusterOn = false;
+	m_isAlive = false;
+	m_initialRespawn = true;
+	m_respawning = false;
+	m_respawnCounter = 0;
+	m_shipLives = 3;
 	std::vector<Vector2> pointsToPush;
 	pointsToPush.push_back(Vector2(0.0f, 20.0f));
 	pointsToPush.push_back(Vector2(12.0f, -10.0f));
@@ -29,68 +34,143 @@ void Player::Update(float deltaTime)
 	 if(speed > maxVelocity)
 		setVelocity(Vector2((getVelocity().x/speed) * maxVelocity, (getVelocity().y / speed) * maxVelocity));
 	
-	 if (!thrusterOn)
+	 if (!m_thrusterOn)
 	 {
 		 setVelocity(getVelocity() * frictionFactor);
 	 }
-
+ 
+	 respawn();
+	 
 	Entity::Update(deltaTime);
 }
 
 void Player::Render()
 {
-	Vector2 position = getPosition();
-	std::vector<Vector2> points = getPoints();
-	float shipOrientation = getOrientation();
-	glLoadIdentity();
+	if (m_isAlive)
+	{
+		Vector2 position = getPosition();
+		std::vector<Vector2> points = getPoints();
+		float shipOrientation = getOrientation();
+		glLoadIdentity();
 
-	// Translate a vector
-	glTranslatef(position.x, position.y, 0.0f);
+		// Translate a vector
+		glTranslatef(position.x, position.y, 0.0f);
 
-	// Changes the orientation
-	glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
+		// Changes the orientation
+		glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
+
+		glColor3f(0.235, 0.702, 0.443);
+
+		//Draw ship
+		glBegin(GL_POLYGON);
+		for (Vector2 i : points)
+		{
+			glVertex2f(i.x, i.y);
+		}
+		glEnd();
+
+		glLoadIdentity();
+
+		// Translate a vector
+		glTranslatef(position.x, position.y, 0.0f);
+
+		// Changes the orientation
+		glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		glBegin(GL_LINE_LOOP);
+		for (Vector2 i : points)
+		{
+			glVertex2f(i.x, i.y);
+		}
+		glEnd();
+
+		if (getDebuggingOn())
+			drawHollowCircle(position.x, position.y, getRadius());
+
+		Thruster();
+	}
 	
-	glColor3f(0.235, 0.702, 0.443);
-
-	//Draw ship
-	glBegin(GL_POLYGON);
-	for (Vector2 i : points)
-	{
-		glVertex2f(i.x, i.y);
-	}
-	glEnd();
-
-	glLoadIdentity();
-
-	// Translate a vector
-	glTranslatef(position.x, position.y, 0.0f);
-
-	// Changes the orientation
-	glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
-
-	glColor3f(1.0f, 1.0f, 1.0f);
-
-	glBegin(GL_LINE_LOOP);
-	for (Vector2 i : points)
-	{
-		glVertex2f(i.x, i.y);
-	}
-	glEnd();
-
-	if (getDebuggingOn())
-		drawHollowCircle(position.x, position.y, getRadius());
-
-	Thruster();
 }
 
 void Player::setThrusterOn(bool newThrusterOn)
 {
-	thrusterOn = newThrusterOn;
+	m_thrusterOn = newThrusterOn;
 }
 
 bool Player::getThrusterOn()
 {
-	return thrusterOn;
+	return m_thrusterOn;
+}
+
+
+void Player::setIsAlive(bool newValue)
+{
+	m_isAlive = newValue;
+}
+
+bool Player::getIsAlive()
+{
+	return m_isAlive;
+}
+
+bool Player::getRespawning()
+{
+	return m_respawning;
+}
+
+int Player::getShipLives()
+{
+	return m_shipLives;
+}
+
+void Player::respawn()
+{
+
+	if (m_shipLives > 0 && !m_isAlive && !m_respawning)
+	{
+		m_respawning = true;
+		setVelocity(Vector2());
+		setPosition(Vector2());
+		setOrientation(0);
+		if (m_initialRespawn)
+			m_initialRespawn = false;
+		else
+			m_shipLives--;
+	}
+
+	if (m_respawning)
+		m_respawnCounter++;
+		
+	if (m_respawning && m_respawnCounter == 110)
+		m_isAlive = true;
+	if (m_respawning && m_respawnCounter == 120)
+		m_isAlive = false;
+	if (m_respawning && m_respawnCounter == 130)
+		m_isAlive = true;
+	if (m_respawning && m_respawnCounter == 140)
+		m_isAlive = false;
+	if (m_respawning && m_respawnCounter == 150)
+		m_isAlive = true;
+	if (m_respawning && m_respawnCounter == 160)
+		m_isAlive = false;
+	if (m_respawning && m_respawnCounter == 170)
+		m_isAlive = true;
+	if (m_respawning && m_respawnCounter == 180)
+		m_isAlive = false;
+	if (m_respawning && m_respawnCounter == 190)
+		m_isAlive = true;
+	if (m_respawning && m_respawnCounter == 200)
+		m_isAlive = false;
+	if (m_respawning && m_respawnCounter == 210)
+		m_isAlive = true;
+	if (m_respawnCounter == 220)
+	{
+		m_respawning = false;
+		m_respawnCounter = 0;
+	}
+
 }
 
 Bullet Player::Shoot()
@@ -100,7 +180,7 @@ Bullet Player::Shoot()
 
 void Player::Thruster() 
 {
-	if (thrusterOn) 
+	if (m_thrusterOn) 
 	{
 		glLoadIdentity();
 		glTranslatef(getPosition().x, getPosition().y, 0.0f);
@@ -128,14 +208,18 @@ void Player::Thruster()
 
 void Player::MoveForward()
 {
-	thrusterOn = true;
-	MathUtilities mathUtilities;
-	float shipOrientation = getOrientation();
-	if (getMass() > 0)
+	if (m_isAlive)
 	{
-		Vector2 velocityToAdd(-((5 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (5 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
-		addVelocity(velocityToAdd);
+		m_thrusterOn = true;
+		MathUtilities mathUtilities;
+		float shipOrientation = getOrientation();
+		if (getMass() > 0)
+		{
+			Vector2 velocityToAdd(-((5 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (5 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
+			addVelocity(velocityToAdd);
+		}
 	}
+	
 }
 
 void Player::RotateLeft(float angle)
