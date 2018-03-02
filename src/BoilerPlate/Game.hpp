@@ -12,6 +12,10 @@
 // OpenGL includes
 #include <GL/glew.h>
 #include <SDL_opengl.h>
+//Sound Library includes
+#include <irrKlang.h>
+//Text Renderer
+#include "TextRenderer.hpp"
 
 class Game
 {
@@ -21,6 +25,8 @@ private:
 	int m_height;
 	bool m_debuggingOn;
 	bool m_resetGame;
+	bool m_isPaused;
+	bool m_gameStarted;
 	Player m_player;
 	MathUtilities mathUtilities;
 	std::vector<Asteroid> m_asteroidVector;
@@ -29,6 +35,10 @@ private:
 	int m_time;
 	int m_asteroidCount;
 	int m_score;
+	int m_lifeScoreCounter;
+	TextRenderer textRenderer;
+	TTF_Font *gameFont;
+	SDL_Color gameFontColor;
 
 public:
 
@@ -42,6 +52,7 @@ public:
 	void updateFrameratesGraphic(float);
 	void updateInputManagerMovement();
 	void updateAsteroidCount();
+	void updatePlayerLives();
 
 	void Render();
 	void renderAsteroids();
@@ -54,7 +65,8 @@ public:
 	void setDebug();
 	void playerShoot();
 	bool isColliding(float, float);
-
+	int getWidth();
+	int getHeight();
 
 	void addAsteroid();
 	void removeAsteroid();
@@ -63,6 +75,9 @@ public:
 	void clearGame();
 	Player getPlayer();
 	void updateFrames(float, float);
+	void initGameFontColor(int, int, int, int);
+	void renderGameGUI();
+	
 
 
 	Game();

@@ -5,6 +5,7 @@
 
 const float maxVelocity = 350.0f;
 const float frictionFactor = 0.98f;
+MathUtilities maths;
 
 Player::Player() : Entity()
 {
@@ -125,19 +126,29 @@ int Player::getShipLives()
 	return m_shipLives;
 }
 
+void Player::setShipLives(int newShipLife)
+{
+	m_shipLives = newShipLife;
+}
+
 void Player::respawn()
 {
 
-	if (m_shipLives > 0 && !m_isAlive && !m_respawning)
+	if ((m_initialRespawn || m_shipLives >= 0) && (!m_isAlive && !m_respawning))
 	{
-		m_respawning = true;
-		setVelocity(Vector2());
-		setPosition(Vector2());
-		setOrientation(0);
-		if (m_initialRespawn)
-			m_initialRespawn = false;
-		else
-			m_shipLives--;
+		if (m_shipLives > 0)
+		{
+			m_respawning = true;
+			setVelocity(Vector2());
+			setPosition(Vector2());
+			setOrientation(0);
+			if (m_initialRespawn)
+				m_initialRespawn = false;
+			else
+				m_shipLives--;
+		}
+		else 
+			m_shipLives = -1;
 	}
 
 	if (m_respawning)
@@ -173,9 +184,20 @@ void Player::respawn()
 
 }
 
+void Player::setInitialRespawn(bool newInitialRespawn)
+{
+	m_initialRespawn = newInitialRespawn;
+}
+
 Bullet Player::Shoot()
 {
-	return Bullet(getPosition(), getOrientation());
+	float orientation = getOrientation();
+	float radius = getRadius();
+	Vector2 position = getPosition();
+	float x = position.x + ((cosf(maths.degreesToRadians(orientation)) + radius) * (-sinf(maths.degreesToRadians(orientation))));
+	float y = position.y + ((-sinf(maths.degreesToRadians(orientation)) + radius) * (cosf(maths.degreesToRadians(orientation))));
+	Vector2 positionInTip = Vector2(x, y);
+	return Bullet(positionInTip, orientation);
 }
 
 void Player::Thruster() 
@@ -215,11 +237,10 @@ void Player::MoveForward()
 		float shipOrientation = getOrientation();
 		if (getMass() > 0)
 		{
-			Vector2 velocityToAdd(-((5 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (5 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
+			Vector2 velocityToAdd(-((7 / getMass()) * sinf(mathUtilities.degreesToRadians(shipOrientation))), (7 / getMass()) * cosf(mathUtilities.degreesToRadians(shipOrientation)));
 			addVelocity(velocityToAdd);
 		}
 	}
-	
 }
 
 void Player::RotateLeft(float angle)

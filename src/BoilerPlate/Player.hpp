@@ -37,7 +37,9 @@ public:
 	bool getIsAlive();
 	bool getRespawning();
 	int getShipLives();
+	void setShipLives(int);
 	void respawn();
+	void setInitialRespawn(bool);
 	Bullet Shoot();
 };
 

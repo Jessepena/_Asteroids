@@ -152,6 +152,7 @@ namespace Engine
 			game.clearGame();
 			game.loadGame();
 		}
+		OnResize(game.getWidth(), game.getHeight());
 		InputManager::Update();
 	}
 

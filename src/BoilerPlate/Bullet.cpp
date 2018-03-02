@@ -70,15 +70,7 @@ void Bullet::Move()
 	float bulletOrientation = getOrientation();
 	if (getMass() > 0)
 	{
-		if (getVelocity().Length() < 3)
-		{
-			Vector2 velocityToAdd(-((400 / getMass()) * sinf(mathUtilities.degreesToRadians(bulletOrientation))), 400 / getMass() * cosf(mathUtilities.degreesToRadians(bulletOrientation)));
-			addVelocity(velocityToAdd);
-		}
-		else
-		{
-			Vector2 velocityToAdd(-((150 / getMass()) * sinf(mathUtilities.degreesToRadians(bulletOrientation))), 150 / getMass() * cosf(mathUtilities.degreesToRadians(bulletOrientation)));
-			addVelocity(velocityToAdd);
-		}
+			Vector2 velocityToSet(-((500 / getMass()) * sinf(mathUtilities.degreesToRadians(bulletOrientation))), 500 / getMass() * cosf(mathUtilities.degreesToRadians(bulletOrientation)));
+			setVelocity(velocityToSet);
 	}
 }
