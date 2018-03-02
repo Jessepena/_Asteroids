@@ -167,7 +167,6 @@ void Game::updatePlayerCollision()
 				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
 				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::MEDIUM));
 				m_asteroidVector.erase(m_asteroidVector.begin() + i);
-
 			}
 			else if (m_asteroidVector[i].GetSize() == Asteroid::AsteroidSize::Size::MEDIUM)
 			{
@@ -175,7 +174,6 @@ void Game::updatePlayerCollision()
 				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
 				m_asteroidVector.push_back(Asteroid(m_asteroidVector[i].getPosition(), Asteroid::AsteroidSize::Size::SMALL));
 				m_asteroidVector.erase(m_asteroidVector.begin() + i);
-
 			}
 			else
 			{
@@ -193,7 +191,7 @@ void Game::drawShipLives()
 {
 		glLoadIdentity();
 
-		glTranslatef(-(m_width / 2.0f) + 35, (m_height / 2) - 35, 0.0f);
+		glTranslatef(-(m_width / 2.0f) + 35.0f, (m_height / 2.0f) - 35.0f, 0.0f);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		int lifePosition = 0;
@@ -206,7 +204,7 @@ void Game::drawShipLives()
 				glVertex2f(i.x + lifePosition, i.y);
 			}
 			glEnd();
-			lifePosition += 37.5;
+			lifePosition += 37;
 		}
 }
 
@@ -321,7 +319,7 @@ void Game::drawFrameratesGraphic()
 
 		for (int i = 0; i < 250; i++)
 		{
-			glVertex2f(i + 280, m_framerates[i] - 1600);
+			glVertex2f(i + 280.0f, m_framerates[i] - 1600.0f);
 		}
 
 		glEnd();
@@ -438,31 +436,29 @@ void Game::renderGameGUI()
 {
 	if (m_gameStarted)
 	{
-		textRenderer.RenderText("SCORE " + std::to_string(m_score), gameFontColor, -(m_player.getScreenWidth() / 2.0f) - m_player.getScreenWidth()*0.45, (m_player.getScreenHeight() / 2.0f) + m_player.getScreenHeight() * 0.20, 10.0f);
-
+		textRenderer.RenderText("SCORE " + std::to_string(m_score), gameFontColor, -(m_player.getScreenWidth() / 2.0f) - m_player.getScreenWidth()*0.45f, (m_player.getScreenHeight() / 2.0f) + m_player.getScreenHeight() * 0.20f, 10);
 		if (m_player.getShipLives() == -1 && !m_player.getIsAlive())
 		{
-			textRenderer.RenderText("GAME OVER", gameFontColor, -125.0f, 0.0f, 80.0f);
-			textRenderer.RenderText("PRESS 'G' TO PLAY AGAIN", gameFontColor, -225.0f, -50.0f, 0.0f);
+			textRenderer.RenderText("GAME OVER", gameFontColor, -125.0f, 0.0f, 80);
+			textRenderer.RenderText("PRESS 'G' TO PLAY AGAIN", gameFontColor, -225.0f, -50.0f, 0);
 		}
 
 		if (m_player.getShipLives() >= 0 && !m_player.getIsAlive())
 		{
-			textRenderer.RenderText("RESPAWNING", gameFontColor, -100.0f, 50.0f, 0.0f);
+			textRenderer.RenderText("RESPAWNING", gameFontColor, -100.0f, 50.0f, 0);
 		}
 
 		if (m_isPaused)
-			textRenderer.RenderText("GAME IS PAUSED", gameFontColor, -180.0f, 100.0f, 0.0f);
+			textRenderer.RenderText("GAME IS PAUSED", gameFontColor, -180.0f, 100.0f, 0);
 	}
 	else
 	{
-		textRenderer.RenderText("ASTEROIDS PUCMM", gameFontColor, -255.0f, 100.0f, 0.0f);
-		textRenderer.RenderText("DESTROY ASTEROIDS TO SCORE POINTS", gameFontColor, -285.0f, 75.0f, 0.0f);
-		textRenderer.RenderText("USE W , A , D TO MOVE", gameFontColor, -170.0f, -50.0f, 0.0f);
-		textRenderer.RenderText("SPACE TO SHOOT!", gameFontColor, -215.0f, -75.0f, 0.0f);
-		textRenderer.RenderText("PRESS 'G' TO START GAME", gameFontColor, -230.0f, -100.0f, 0.0f);
-	}
-		
+		textRenderer.RenderText("ASTEROIDS PUCMM", gameFontColor, -255.0f, 100.0f, 0);
+		textRenderer.RenderText("DESTROY ASTEROIDS TO SCORE POINTS", gameFontColor, -285.0f, 75.0f, 0);
+		textRenderer.RenderText("USE W , A , D TO MOVE", gameFontColor, -170.0f, -50.0f, 0);
+		textRenderer.RenderText("SPACE TO SHOOT!", gameFontColor, -215.0f, -75.0f, 0);
+		textRenderer.RenderText("PRESS 'G' TO START GAME", gameFontColor, -230.0f, -100.0f, 0);
+	}	
 }
 
 void Game::renderPlayerAsteroidLines()
@@ -570,19 +566,19 @@ Player Game::getPlayer()
 
 void Game::updateFrames(float width, float height)
 {
-	m_width = width;
-	m_height = height;
+	m_width = (int)width;
+	m_height = (int)height;
 
-	m_player.updateFrame(width / 2, height / 2);
-
+	m_player.updateFrame((int)(width/2), (int)(height/2));
+	
 	for (int i = 0; i < m_bulletVector.size(); i++)
 	{
-		m_bulletVector[i].updateFrame(width / 2, height / 2);
+		m_bulletVector[i].updateFrame((int)(width/2), (int)(height/2));
 	}
 	
 	for (int i = 0; i < m_asteroidVector.size(); i++)
 	{
-		m_asteroidVector[i].updateFrame(width / 2, height / 2);
+		m_asteroidVector[i].updateFrame((int)(width/2), (int)(height/2));
 	}
 }
 

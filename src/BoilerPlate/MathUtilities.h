@@ -10,7 +10,7 @@
 // OpenGL includes
 #include <GL/glew.h>
 #include <SDL_opengl.h>
-#define M_PI 3.14159265358979323846
+#define PI 3.14159265358979323846
 
 class MathUtilities
 {

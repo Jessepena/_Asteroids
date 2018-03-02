@@ -58,13 +58,13 @@ T MathUtilities::GetMin(T a, T b, T c, T d) {
 
 int MathUtilities::floatRoundToInt(float x)
 {
-	int i = roundf(x);
+	int i = (int)roundf(x);
 	return i;
 }
 
 int MathUtilities::floatRoundToEvenInt(float x)
 {
-    int i = x;
+    int i = (int)x;
     if(i % 2 != 0)
         i++;
 
@@ -74,12 +74,12 @@ int MathUtilities::floatRoundToEvenInt(float x)
 
 float MathUtilities::degreesToRadians(float angle)
 {
-	return angle * (M_PI / 180);
+	return (float)(angle * (PI / 180));
 }
 
 float MathUtilities::radiansToDegrees(float angle)
 {
-	return angle * (180 / M_PI);
+	return (float)(angle * (180 / PI));
 }
 
 
@@ -116,20 +116,18 @@ template <class T>
  int MathUtilities::floatInterpolate(float x, int Min, int Max)
  {
      int range = Max - Min, result = -1;
-
      if(x >= 0 && x <= 1)
      {
-        result = range * x;
+        result = (int)(range * x);
         result += Min;
      }
-
      return result;
  }
 
  float MathUtilities::randInRange(int min, int max)
  {
 	
-	 return rand() % max + min;
+	 return (float)(rand() % max + min);
  }
 
  float MathUtilities::calculateDistance(float x1, float y1, float x2, float y2)

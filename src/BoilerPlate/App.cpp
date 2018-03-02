@@ -141,7 +141,7 @@ namespace Engine
 
 		double elapsedTime = endTime - startTime;
 
-		game.Update(elapsedTime);
+		game.Update((float)elapsedTime);
 
 		m_lastFrameTime = m_timer->GetElapsedTimeInSeconds();
 
@@ -167,7 +167,7 @@ namespace Engine
 	bool App::SDLInit()
 	{
 
-		game.updateFrames(m_width, m_height);
+		game.updateFrames((float)m_width, (float)m_height);
 		// Initialize SDL's Video subsystem
 		//
 		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -261,7 +261,7 @@ namespace Engine
 		//
 		m_width = width;
 		m_height = height;
-		game.updateFrames(width, height);
+		game.updateFrames((float)width, (float)height);
 		SetupViewport();
 	}
 

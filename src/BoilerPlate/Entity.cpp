@@ -94,21 +94,21 @@ void Entity::Warping() {
 	// X axis warping
 	if (m_position.x < -m_screenWidth)
 	{
-		m_position.x = m_screenWidth;
+		m_position.x = (float)m_screenWidth;
 	}
 	else if (m_position.x > m_screenWidth)
 	{
-		m_position.x = -m_screenWidth;
+		m_position.x = (float)-m_screenWidth;
 	}
 
 	// Y axis warping
 	if (m_position.y < -m_screenHeight)
 	{
-		m_position.y = m_screenHeight;
+		m_position.y = (float)m_screenHeight;
 	}
 	else if (m_position.y > m_screenHeight)
 	{
-		m_position.y = -m_screenHeight;
+		m_position.y = (float)-m_screenHeight;
 	}
 }
 
@@ -117,7 +117,7 @@ void Entity::drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius)
 	int i;
 	int lineAmount = 100; //# of triangles used to draw circle
 
-	GLfloat twicePi = 2.0f * M_PI;
+	GLfloat twicePi = (GLfloat)(2.0f * M_PI);
 
 	glLoadIdentity();
 

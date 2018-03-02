@@ -60,7 +60,7 @@ void Player::Render()
 		// Changes the orientation
 		glRotatef(shipOrientation, 0.0f, 0.0f, 1.0f);
 
-		glColor3f(0.235, 0.702, 0.443);
+		glColor3f(0.235f, 0.702f, 0.443f);
 
 		//Draw ship
 		glBegin(GL_POLYGON);
